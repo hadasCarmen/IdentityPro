@@ -1,0 +1,27 @@
+﻿@model IdentityPro.Models.OrderItem
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>OrderItem</h4>
+    <hr />
+    <div class="shop_img">
+        <img src="/images/shop/@Model.ImagePath" alt="Product Image" class="img-responsive zoom">
+    </div>
+
+    <div class="shop_detail">
+        <h2 class="ice_heading">@Html.DisplayFor(model => model.Name)</h2>
+        <h1>$@Html.DisplayFor(model => model.Price)</h1>
+        <h1>OrderId: @Html.DisplayFor(model => model.OrderId)</h1>
+        <h1>Amount: @Html.DisplayFor(model => model.Amount)</h1>
+
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

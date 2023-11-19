@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<!--
+Template Name: Ice-Cream - ice-cream responsive Template
+Version: 1.0.0
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- Begin Head -->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<meta name="description" content="ice-cream" />
+	<meta name="keywords" content="candy, chocolate, food, icecream, pastry, restaurant, yogurt, portfolio, presentation, reservation">
+	<meta name="author" content="TemplateBundle" />
+	<meta name="MobileOptimized" content="320">
+	<title>Ice Cream Parlour HTML Website Template</title>
+	<title>@ViewData["Title"] - Ice_cream_shop</title>
+	<!-- start style-->
+	<link rel="stylesheet" type="text/css" href="~/css/animate.css" asp-append-version="true">>
+	<link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css" asp-append-version="true">>
+	<link rel="stylesheet" type="text/css" href="~/css/owl.carousel.css" asp-append-version="true">>
+	<link rel="stylesheet" type="text/css" href="~/css/fonts.css" asp-append-version="true">>
+	<link rel="stylesheet" type="text/css" href="~/css/flaticon.css" asp-append-version="true">>
+	<link rel="stylesheet" type="text/css" href="~/css/custom_animation.css" asp-append-version="true">>
+	<link rel="stylesheet" type="text/css" href="~/css/font-awesome.min.css" asp-append-version="true">>
+	<link rel="stylesheet" type="text/css" href="~/css/magnific-popup.css" asp-append-version="true">>
+	<link rel="stylesheet" type="text/css" href="~/css/jquery-ui.min.css" asp-append-version="true">>
+	<link rel="stylesheet" type="text/css" href="~/css/style.css" asp-append-version="true">>
+	<!-- favicon link-->
+	<link rel="icon" type="image/ico" href="/images/favicon">
+
+</head>
+<body>
+	<div class="loader_wrapper">
+		<div class="loader">
+			<img src="/images/loader.gif" alt="">
+		</div>
+	</div>
+	<div class="ice_main_wrapper">
+		<div class="ice_main_wrapper layout1">
+		<div class="ice_banner_wrapper inner_banner">
+			<img src="/images/inner_banner.jpg" alt="" class="img-responsive">>
+
+			<div class="banner_content">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 col-lg-offset-1 col-md-offset-1 col-sm-offset-0 col-xs-offset-0">
+							<div class="header_wrapper">
+								<div class="ice_logo">
+									<a asp-controller="Default" asp-action="Home"><img src="/images/logo.png" alt=""></a>
+								</div>
+								<div class="ice_menu_wraper">
+									<a data-toggle="collapse" data-target="#menu" class="toggle"><span></span></a>
+									<div class="ice_menu collapse" id="menu">
+										<a data-toggle="collapse" data-target="#menu" class="toggle close"><span></span></a>
+										<ul>
+											<li><a asp-controller="Default" asp-action="Home">home</a></li>
+											<li><a asp-controller="Default" asp-action="About">About</a></li>
+											<li><a asp-controller="Default" asp-action="Shop">Shop</a></li>
+											<li><a asp-controller="Default" asp-action="Contact">Contact</a></li>
+										</ul>
+									</div>
+									<div class="pull-right search_wrapper">
+										<ul>
+											<li class="cart">
+													<a><i class="flaticon-shopping-purse-icon"></i>
+														<span id="product-count">
+															@(ViewBag.Products?.Count ?? 0)
+														</span>
+													</a>
+												<ul class="cart_box">
+													<ul id="product-list">
+															<!-- Product items will be appended here -->
+														</ul>
+												<li>
+													<div class="cart_section">
+																<p><a id="view-cart-link" class="ice_btn">view cart</a></p>
+																<p><a asp-controller="Default" asp-action="Checkout" class="ice_btn">proceed to checkout</a></p>
+													</div>
+												</li>
+											</ul>
+											</li>
+											<li class="search">
+												<a><i class="flaticon-magnifier-tool"></i></a>
+												<ul class="search_box">
+													<li><a class="search_close"></a></li>
+													<li>
+														<form class="search_form">
+															<p>
+																<input type="text" value="" name="search" id="search">
+																<label for="search">search</label>
+															</p>
+															<a href="#" class="search_btn"><i class="flaticon-magnifier-tool"></i></a>
+														</form>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<div class="slider_content">
+								<h1>@ViewData["Title"]</h1>
+								<ul class="breadcrumb">
+									<li><a asp-controller="Default" asp-action="Home">home</a></li>
+									<li class="active">@ViewData["Title"]</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="overlay">
+				<div class="chery c1"><img src="/images/banner/1.png" alt=""></div>
+				<div class="chery c2"><img src="/images/banner/1.png" alt=""></div>
+				<div class="chery c3"><img src="/images/banner/1.png" alt=""></div>
+				<div class="chery c4"><img src="/images/banner/1.png" alt=""></div>
+				<div class="chery c5"><img src="/images/banner/1.png" alt=""></div>
+			</div>
+		</div>
+		</div>
+
+
+		@RenderBody()
+
+		<div class="ice_footer_wrapper">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="widget widget_info text-center">
+							<div class="ice_logo">
+								<a asp-controller="Default" asp-action="Home"><img src="/images/logo1.png" alt=""></a>
+							</div>
+							<p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical.</p>
+							<ul class="social_icon">
+								<li><a href="#"><i class="flaticon-facebook-letter-logo"></i></a></li>
+								<li><a href="#"><i class="flaticon-twitter-logo-silhouette"></i></a></li>
+								<li><a href="#"><i class="flaticon-linkedin-logo"></i></a></li>
+								<li><a href="#"><i class="flaticon-google-plus-logo"></i></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="widget widget_news">
+							<h2 class="ice_sub_heading widget-title">latest news</h2>
+							<ul>
+								<li>
+									<div class="news_img"><a href="#"><img src="/images/footer/footer2.jpg" alt=""></a></div>
+									<div class="news_detail"><a href="#">22 jul 2017</a> <p>Li nov lingua franca va simplic Europan. simplice Europan.</p></div>
+								</li>
+								<li>
+									<div class="news_img"><a href="#"><img src="/images/footer/footer1.jpg" alt=""></a></div>
+									<div class="news_detail"><a href="#">22 jul 2017</a> <p>Li nov lingua franca va simplic Europan. simplice Europan.</p></div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="widget widget_address">
+							<h2 class="ice_sub_heading widget-title">our contact</h2>
+							<ul>
+								<li>
+									<div class="address_icon"><i class="flaticon-facebook-placeholder-for-locate-places-on-maps"></i></div>
+									<div class="address_detail"><h3>Address</h3> <p>Rainbow Drive Youngstown</p></div>
+								</li>
+								<li>
+									<div class="address_icon"><i class="flaticon-call-answer"></i></div>
+									<div class="address_detail"><h3>Contact Numbers</h3> <p>1800 450 1245</p></div>
+								</li>
+								<li>
+									<div class="address_icon"><i class="fa fa-clock-o"></i></div>
+									<div class="address_detail"><h3>Office Timings</h3> <p>Mon - Fri 9.00am : 6.00pm</p></div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="overlay">
+				<img src="/images/footer/ice.png" alt="">
+			</div>
+		</div>
+		<div class="ice_copyright_wrapper text-center">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="copyright">
+							<p class="white">Copyrights &copy; 2017, All Rights Reserved by <a asp-controller="Default" asp-action="Home">home</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="goto_wrapper"><img src="/images/loader.gif" alt=""></div>
+	<!-- site jquery start -->
+	<scriptscript src="https://code.jquery.com/jquery-3.6.0.min.js"></scriptscript>
+	<script type="text/javascript" src="/js/jquery.js"></script>
+	<script type="text/javascript" src="/js/owl.carousel.min.js"></script>
+	<script type="text/javascript" src="/js/theia-sticky-sidebar.js"></script>
+	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/js/okzoom.min.js"></script>
+	<script type="text/javascript" src="/js/wow.js"></script>
+	<script type="text/javascript" src="/js/jquery.magnific-popup.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/js/custom.js"></script>
+	<script  src="~/js/cart.js"></script>
+	<!-- site jquery end -->
+	@RenderSection("Scripts", required: false)
+</body>
+</html> 

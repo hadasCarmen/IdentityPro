@@ -1,0 +1,154 @@
+﻿@model IdentityPro.Models.Order
+
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="ice_main_section1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="woocommerce">
+                    <form asp-action="UpdateCart" method="post">
+						<input type="hidden" name="id" value="@Model.Id"/>
+                        <table class="table table-bordered shop_table cart">
+                            <thead>
+                                <tr>
+                                    <th class="product-wrap">Product</th>
+                                    <th class="product-price">Price</th>
+                                    <th class="product-quantity">Quantity</th>
+                                    <th class="product-subtotal">Total</th>
+                                    <th class="product-remove">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Loop through cart items and display them as table rows -->
+                                @if (Model.Products != null && Model.Products.Any())
+                                {
+									@for (var i = 0; i < Model.Products.Count; i++)
+									{
+										var product = Model.Products[i];
+										<input type="hidden" name="Products[@Model.Products.IndexOf(product)].Id" value="@product.Id" />
+										<tr class="cart-item">
+											<td class="product-wrap">
+												<div class="product-thumbnail">
+													<a href="#"><img src="/images/shop/@product.ImagePath" alt="@product.Name" class="img-responsive cart-item-image"></a>
+												</div>
+												<div class="product-detail">
+													<h4 class="product-name"><a href="#"><i class="flaticon-check"></i> @product.Name</a></h4>
+												</div>
+											</td>
+											<td class="product-price">
+												<span class="amount">$@product.Price</span>
+											</td>
+											<td class="product-quantity">
+												<input type="number" step="1" min="0" name="Products[@Model.Products.IndexOf(product)].Amount" value="@product.Amount" title="qty" class="input-text qty text" size="4" />
+											</td>
+											<td class="product-subtotal">
+												<span class="amount">$@(product.Price * product.Amount)</span>
+											</td>
+											<td class="product-remove">
+												<button type="button" class="remove_button" title="Remove this item" onclick="removeProduct('@product.Id')">
+													<i class="fa fa-trash-o"></i>
+												</button>
+
+												@*<form asp-action="RemoveProduct" method="post" class="product-remove">
+													<input type="hidden" name="id" value="@Model.Id" />
+													<input type="hidden" name="productId" value="@product.Id" /> <!-- Change to 'productId' -->
+													<button type="submit" class="remove_button" title="Remove this item"><i class="fa fa-trash-o"></i></button>
+												</form>*@
+
+											</td>
+											@*<td class="product-remove">
+												<a href="#" class="remove" title="Remove this item"><i class="fa fa-trash-o"></i></a>
+											</td>*@
+										</tr>
+									}
+
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5">Your cart is empty.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="cart-collaterals">
+                            <div class="row">
+                                <div class="col-lg-6 col-lg-offset-6 col-md-6 col-md-offset-6 col-sm-12 col-offset-0 col-xs-offset-0">
+                                    <div class="cart_totals">
+                                        <h2>Cart Totals</h2>
+                                        <table>
+                                            <tbody>
+                                                <tr class="cart-subtotal">
+                                                    <th>Subtotal</th>
+                                                    <td>
+                                                        @if (Model.Products != null && Model.Products.Any())
+                                                        {
+                                                            var subtotal = Model.Products.Sum(product => product.Price * product.Amount);
+                                                            <span class="amount">$@subtotal</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="amount">$0.00</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                <tr class="order-total">
+                                                    <th>Total</th>
+                                                    <td>
+                                                        @if (Model.Products != null && Model.Products.Any())
+                                                        {
+                                                            var total = Model.Products.Sum(product => product.Price * product.Amount);
+                                                            <strong><span class="amount">$@total</span></strong>
+                                                        }
+                                                        else
+                                                        {
+                                                            <strong><span class="amount">$0.00</span></strong>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="wc-proceed-to-checkout">
+                                            <button type="submit" class="checkout-button ice_btn alt wc-forward" name="update_cart" value="Update Cart">Update Cart</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- JavaScript Code -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+
+<script>
+	function removeProduct(productId) {
+		var orderId = localStorage.getItem("orderId");
+
+		// Send an AJAX POST request to your server endpoint (e.g., RemoveProduct)
+		$.ajax({
+			type: "POST",
+			url: "/Default/RemoveProduct", // Replace with the actual URL
+			data: {
+				orderId: orderId,
+				productId: productId
+			},
+			success: function () {
+				// Reload the page after the AJAX request is successful
+				document.location.reload();
+			},
+			error: function () {
+				// Handle errors if necessary.
+			}
+		});
+	}
+</script>

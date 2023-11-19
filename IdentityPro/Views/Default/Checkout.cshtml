@@ -1,0 +1,204 @@
+﻿
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="ice_main_section1">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="woocommerce">
+					<div class="woocommerce-info">Have a coupon? <a href="#" class="showcoupon">Click here to enter your code</a></div>
+					<div class="row">
+						<form asp-controller="OtherController" asp-action="Create" name="checkout" method="post" class="checkout woocommerce-checkout col-sm-12" action="#">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="customer_details">
+										<div class="woocommerce-billing-fields">
+											<h3>Billing Details</h3>
+											<p>
+												<input type="text" name="billing_first_name" id="billing_first_name" value="">
+												<label for="billing_first_name">First Name <span class="required" title="required">*</span></label>
+											</p>
+											<p>
+												<input type="text" name="billing_last_name" id="billing_last_name" value="">
+												<label for="billing_last_name">Last Name <span class="required" title="required">*</span></label>
+											</p>
+											<p>
+												<input type="text" class="input-text " name="billing_company" id="billing_company" value="">
+												<label for="billing_company">Company Name</label>
+											</p>
+											<p>
+												<input type="email" name="billing_email" id="billing_email" value="">
+												<label for="billing_email">Email Address <span class="required" title="required">*</span></label>
+											</p>
+											<p>
+												<input type="tel" name="billing_phone" id="billing_phone" value="">
+												<label for="billing_phone">Phone <span class="required" title="required">*</span></label>
+											</p>
+											<p>
+												<select name="billing_country" id="billing_country" class="country_to_state country_select "><option value=""></option><option value="AX">Aland Islands</option><option value="AF">Afghanistan</option><option value="AL">Albania</option><option value="DZ">Algeria</option></select>
+												<label for="billing_country" class="">Select a country… <span class="required" title="required">*</span></label>
+											</p>
+											<p>
+												<input type="text" class="input-text " name="billing_address_1" id="billing_address_1" value="">
+												<label for="billing_address_1">Street address</label>
+											</p>
+											<p>
+												<input type="text" class="input-text " name="billing_address_2" id="billing_address_2" value="">
+												<label for="billing_address_2">Apartment, suite, unit etc. (optional)</label>
+											</p>
+											<p>
+												<input type="text" name="billing_city" id="billing_city" value="">
+												<label for="billing_city">Town / City <span class="required" title="required">*</span></label>
+											</p>
+											<div class="row">
+												<div class="col-lg-6 col-md-6">
+													<p>
+														<select name="billing_state" id="billing_state" class="state_select ">
+															<option value=""></option>
+															<option value="AL">Alabama</option>
+															<option value="AK">Alaska</option>
+															<option value="AZ">Arizona</option>
+															<option value="AR">Arkansas</option>
+															<option value="CA">California</option>
+															<option value="CO">Colorado</option>
+															<option value="CT">Connecticut</option>
+															<option value="DE">Delaware</option>
+														</select>
+														<label for="billing_state">State <span class="required" title="required">*</span></label>
+													</p>
+												</div>
+												<div class="col-lg-6 col-md-6">
+													<p>
+														<input type="text" name="billing_postcode" id="billing_postcode" value="">
+														<label for="billing_postcode">Zip <span class="required" title="required">*</span></label>
+													</p>
+												</div>
+											</div>
+											<div class="ice_check_box">
+												<input type="checkbox" id="cat1" name="cat1">
+												<label for="cat1">create an account</label>
+											</div>
+											<div class="create-account">
+												<p>Create an account by entering the information below. If you are a returning customer please login at the top of the page.</p>
+												<p>
+													<input type="password" class="input-text " name="account_password" id="account_password" value="">
+													<label for="account_password">Account password <span class="required" title="required">*</span></label>
+												</p>
+											</div>
+										</div>
+										<div class="woocommerce-shipping-fields">
+											<h3>Additional Information</h3>
+											<h4>order notes</h4>
+											<p class="form-row form-row notes" id="order_comments_field">
+												<textarea name="order_comments" id="order_comments" rows="2" cols="5"></textarea>
+												<label for="order_comments">Notes about your order, e.g. special notes for delivery.</label>
+											</p>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="col-md-6">
+									<h3>Your order</h3>
+									<div class="woocommerce-checkout-review-order">
+										<table class="shop_table woocommerce-checkout-review-order-table">
+											<thead>
+												<tr>
+													<th class="product-name">Product</th>
+													<th class="product-total">Total</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="cart_item">
+													<td class="product-name">
+														Flying Ninja&nbsp;
+														<strong class="product-quantity">× 1</strong>
+													</td>
+													<td class="product-total">
+														<div><span class="amount">$12.00</span></div>
+													</td>
+												</tr>
+												<tr class="cart_item">
+													<td class="product-name">
+														Happy Ninja&nbsp;
+														<strong class="product-quantity">× 1</strong>
+													</td>
+													<td class="product-total">
+														<div><span class="amount">$18.00</span></div>
+													</td>
+												</tr>
+												<tr class="cart_item">
+													<td class="product-name">
+														Happy Ninja&nbsp;<strong class="product-quantity">× 1</strong>
+													</td>
+													<td class="product-total">
+														<div><span class="amount">$35.00</span></div>
+													</td>
+												</tr>
+												<tr class="cart_item">
+													<td class="product-name">Ninja Silhouette&nbsp;<strong class="product-quantity">× 1</strong></td>
+													<td class="product-total">
+														<div><span class="amount">$20.00</span></div>
+													</td>
+												</tr>
+												<tr class="cart_item">
+													<td class="product-name">
+														Ninja Silhouette&nbsp;<strong class="product-quantity">× 1</strong>
+													</td>
+													<td class="product-total">
+														<div><span class="amount">$35.00</span></div>
+													</td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr class="cart-subtotal">
+													<th>Subtotal</th>
+													<td><div><span class="amount">$120.00</span></div></td>
+												</tr>
+												<tr class="order-total">
+													<th>Total</th>
+													<td><div><strong><span class="amount">$120.00</span></strong></div> </td>
+												</tr>
+											</tfoot>
+										</table>
+
+										<div id="payment" class="woocommerce-checkout-payment">
+											<ul class="payment_methods methods">
+												<li>
+													<div class="ice_radio_box">
+														<input type="radio" id="radio1" name="radio">
+														<label for="radio1">cash on delivery</label>
+													</div>
+												</li>
+												<li>
+													<div class="ice_radio_box">
+														<input type="radio" id="radio2" name="radio">
+														<label for="radio2">PayPal</label>
+													</div>
+												</li>
+											</ul>
+
+											<div class="form-row place-order">
+												<input type="submit" class="ice_btn alt" name="woocommerce_checkout_place_order" id="place_order" value="Place order" data-value="Place order">
+											</div>
+
+										</div>
+
+									</div>
+
+
+								</div>
+							</div>
+
+						</form>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

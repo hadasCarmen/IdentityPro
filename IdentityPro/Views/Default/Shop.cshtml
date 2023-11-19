@@ -1,0 +1,232 @@
+﻿@model IEnumerable<IdentityPro.Models.Product>
+
+@{
+    ViewData["Title"] = "Shop";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="ice_main_section1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 theiaStickySidebar">
+				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 theiaStickySidebar">
+					<div class="ice_sidebar shop_sidebar">
+						<div class="widget widget_search">
+							<form class="search_form">
+								<p>
+									<input type="text" name="search" value="" class="search-feild" id="sidebar_search">
+									<label for="sidebar_search">search...</label>
+								</p>
+								<a href="" class="search_btn"><i class="flaticon-magnifier-tool"></i></a>
+							</form>
+						</div>
+						<div class="widget widget_category">
+							<h2 class="widget-title">category</h2>
+							<ul>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="cat1" name="cat1">
+										<label for="cat1">Candies</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="cat2" name="cat2">
+										<label for="cat2">cups</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="cat3" name="cat3">
+										<label for="cat3">Frozen Custurd</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="cat4" name="cat4">
+										<label for="cat4">Butter Scotch</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="cat5" name="cat5">
+										<label for="cat5">Cones</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="cat6" name="cat6">
+										<label for="cat6">Vanilla</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget_brand">
+							<h2 class="widget-title">brand</h2>
+							<ul>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="b1" name="b1">
+										<label for="b1">Candies</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="b2" name="b2">
+										<label for="b2">cups</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="b3" name="b3">
+										<label for="b3">Frozen Custurd</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="b4" name="b4">
+										<label for="b4">Butter Scotch</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="b5" name="b5">
+										<label for="b5">Cones</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="b6" name="b6">
+										<label for="b6">Vanilla</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="widget widget_price">
+							<h2 class="widget-title">Filter By Price</h2>
+							<div id="slider-range" class="range_slider"></div>
+							<p>
+								<label for="amount">Price range:</label>
+								<input type="text" id="amount" readonly>
+							</p>
+						</div>
+						<div class="widget widget_flavour">
+							<h2 class="widget-title">flavours</h2>
+							<ul>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="f1" name="f1">
+										<label for="f1">Candies</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="f2" name="f2">
+										<label for="f2">cups</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="f3" name="f3">
+										<label for="f3">Frozen Custurd</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="f4" name="f4">
+										<label for="f4">Butter Scotch</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="f5" name="f5">
+										<label for="f5">Cones</label>
+									</div>
+								</li>
+								<li>
+									<div class="ice_check_box">
+										<input type="checkbox" id="f6" name="f6">
+										<label for="f6">Vanilla</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="ice_special shop_wrapper">
+                        @foreach (var product in Model)
+                        {
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="special_section text-center wow slideup">
+                                    <div class="special_img">
+										<img src="/images/shop/@product.ImagePath" alt="@product.Name" class="img-responsive">
+                                    </div>
+                                    <h2 class="ice_sub_heading"><a href="shop_single.html"><i class="flaticon-check"></i> @product.Name</a></h2>
+                                    <p>@product.Description</p>
+                                    <div class="wishlist_wrapper">
+                                        <span class="pull-left">$@product.Price</span>
+                                        <a href="" class="pull-right"><i class="flaticon-like"></i> add to wishlist</a>
+                                    </div>
+@*                                    <a href="shop_single.html" class="ice_btn">add to cart</a>*@
+									<button class="ice_btn add-to-order-button" data-product-id="@product.Id">Add to Cart</button>
+								</div>
+                            </div>
+							<div id="success-message" class="success-message hidden">
+								Product added to the cart! 🍓
+							</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+		// Attach a click event handler to all buttons with the "add-to-order-button" class
+		$(".add-to-order-button").click(function () {
+			// Get the product ID from the data-product-id attribute
+			var productId = $(this).data("product-id");
+			var OrderId = localStorage.getItem("orderId");
+			// Send an AJAX request to the server to add the product to the order
+			$.ajax({
+				type: "POST",
+				url: "/Orders/AddToOrder", // Replace with your actual controller action URL
+				data: { productId: productId, orderId: OrderId },
+				success: function (response) {
+					console.log('123!#' + JSON.stringify(response));
+					var newOrderId = response.order.id; // Access the 'id' property of the 'order' object
+					// Update the local storage with the new orderId value received from the server
+					localStorage.setItem('orderId', newOrderId);
+					var productCountElement = $('#product-count');
+					var currentCount = parseInt(productCountElement.text(), 10); // Parse the current count as an integer
+					var updatedCount = currentCount + 1; // Increment the count by 1
+					productCountElement.text(updatedCount); // Update the HTML element
+					//alert("Product added to the order!");
+					var successMessage = document.getElementById("success-message");
+					successMessage.classList.remove("hidden");
+					 setTimeout(function() {
+               successMessage.classList.add("hidden"); // Hide the message
+            }, 3000);
+
+				},
+				error: function () {
+					// Handle AJAX error
+					alert("An error occurred while adding the product to the order.");
+				}
+			});
+		});
+	});
+
+
+</script>
+
+
+
+
