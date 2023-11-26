@@ -1,11 +1,13 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="ice_main_section1">
 	<div class="container">
+		<div id="success-message" class="success-message hidden">
+			Product added to the cart! 🍓
+		</div>
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="woocommerce">
@@ -17,29 +19,10 @@
 									<div class="customer_details">
 										<div class="woocommerce-billing-fields">
 											<h3>Billing Details</h3>
+											
 											<p>
-												<input type="text" name="billing_first_name" id="billing_first_name" value="">
-												<label for="billing_first_name">First Name <span class="required" title="required">*</span></label>
-											</p>
-											<p>
-												<input type="text" name="billing_last_name" id="billing_last_name" value="">
-												<label for="billing_last_name">Last Name <span class="required" title="required">*</span></label>
-											</p>
-											<p>
-												<input type="text" class="input-text " name="billing_company" id="billing_company" value="">
-												<label for="billing_company">Company Name</label>
-											</p>
-											<p>
-												<input type="email" name="billing_email" id="billing_email" value="">
-												<label for="billing_email">Email Address <span class="required" title="required">*</span></label>
-											</p>
-											<p>
-												<input type="tel" name="billing_phone" id="billing_phone" value="">
-												<label for="billing_phone">Phone <span class="required" title="required">*</span></label>
-											</p>
-											<p>
-												<select name="billing_country" id="billing_country" class="country_to_state country_select "><option value=""></option><option value="AX">Aland Islands</option><option value="AF">Afghanistan</option><option value="AL">Albania</option><option value="DZ">Algeria</option></select>
-												<label for="billing_country" class="">Select a country… <span class="required" title="required">*</span></label>
+												<input type="text" name="billing_city" id="billing_city" value="">
+												<label for="billing_city">Town / City <span class="required" title="required">*</span></label>
 											</p>
 											<p>
 												<input type="text" class="input-text " name="billing_address_1" id="billing_address_1" value="">
@@ -49,27 +32,7 @@
 												<input type="text" class="input-text " name="billing_address_2" id="billing_address_2" value="">
 												<label for="billing_address_2">Apartment, suite, unit etc. (optional)</label>
 											</p>
-											<p>
-												<input type="text" name="billing_city" id="billing_city" value="">
-												<label for="billing_city">Town / City <span class="required" title="required">*</span></label>
-											</p>
 											<div class="row">
-												<div class="col-lg-6 col-md-6">
-													<p>
-														<select name="billing_state" id="billing_state" class="state_select ">
-															<option value=""></option>
-															<option value="AL">Alabama</option>
-															<option value="AK">Alaska</option>
-															<option value="AZ">Arizona</option>
-															<option value="AR">Arkansas</option>
-															<option value="CA">California</option>
-															<option value="CO">Colorado</option>
-															<option value="CT">Connecticut</option>
-															<option value="DE">Delaware</option>
-														</select>
-														<label for="billing_state">State <span class="required" title="required">*</span></label>
-													</p>
-												</div>
 												<div class="col-lg-6 col-md-6">
 													<p>
 														<input type="text" name="billing_postcode" id="billing_postcode" value="">
@@ -202,3 +165,18 @@
 		</div>
 	</div>
 </div>
+<script>
+	$(document).ready(function () {
+		var successMessage = document.getElementById("success-message");
+		// Check if TempData contains the registration message
+		var registerMessage = '@TempData["RegisterMessage"]';
+		console.log(registerMessage);
+		if (registerMessage) {
+			successMessage.innerText = registerMessage; // Set the message
+			successMessage.classList.remove("hidden");
+			setTimeout(function () {
+				successMessage.classList.add("hidden"); // Hide the message
+			}, 3000);
+		}
+	});
+</script>

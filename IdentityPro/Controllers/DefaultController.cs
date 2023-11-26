@@ -1,6 +1,7 @@
 ﻿using IdentityPro.Data;
 using IdentityPro.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -102,6 +103,12 @@ namespace IdentityPro.Controllers
         // GET: DefaultController/Checkout
         public ActionResult Checkout()
         {
+            string userName = User.Identity?.Name;
+            if(userName == null)
+            {
+                TempData["RegisterMessage"] = "Please register to access this feature.";
+                return RedirectToPage("/Account/Register", new { area = "Identity" });
+            }
             return View();
         }
 

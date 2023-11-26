@@ -2,7 +2,7 @@
 
 namespace IdentityPro.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class appUser : IdentityUser
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -11,4 +11,6 @@ namespace IdentityPro.Models
         public string Apartment { get; set; }
         public int ZipCode { get; set; }
     }
+
+
 }
