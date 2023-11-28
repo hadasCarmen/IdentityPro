@@ -11,6 +11,7 @@ namespace IdentityPro.Models
 		public DateTime? CreatedDate { get; set; }
 		public DateTime? DeliveryDate { get; set; }
 		public  Weather Weather { get; set; }
+		public ApplicationUser User { get; set; }
     }
  //   public class Weather
 	//{

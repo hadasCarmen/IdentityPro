@@ -200,6 +200,7 @@
 				url: "/Orders/AddToOrder", 
 				data: { productId: productId, orderId: OrderId },
 				success: function (response) {
+					console.log('123!#' + JSON.stringify(response));
 					var newOrderId = response.order.id; // Access the 'id' property of the 'order' object
 					// Update the local storage with the new orderId value received from the server
 					localStorage.setItem('orderId', newOrderId);

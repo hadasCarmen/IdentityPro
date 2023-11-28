@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+<!DOCTYPE html>
 <!--
 Template Name: Ice-Cream - ice-cream responsive Template
 Version: 1.0.0
@@ -61,20 +66,15 @@ Version: 1.0.0
 											<li><a asp-controller="Default" asp-action="About">About</a></li>
 											<li><a asp-controller="Default" asp-action="Shop">Shop</a></li>
 											<li><a asp-controller="Default" asp-action="Contact">Contact</a></li>
-											
-
-												@*@if (condition)
+												@if (User.Identity?.Name! == "manager@gmail.com")
 												{
 													<li><a asp-controller="Orders" asp-action="Index">Orders</a></li>
 												}
-												@if (condition)
+												@if (User.Identity?.Name! == "manager@gmail.com")
 												{
 													<li><a asp-controller="Products" asp-action="Index">Products</a></li>
 												}
-												@if (condition)
-												{
-													<li><a asp-controller="Users" asp-action="Index">users</a></li>
-												}*@
+												
 
 										</ul>
 									</div>
@@ -112,21 +112,6 @@ Version: 1.0.0
 														</li>
 													</ul>
 												</li>
-											<li class="search">
-												<a><i class="flaticon-magnifier-tool"></i></a>
-												<ul class="search_box">
-													<li><a class="search_close"></a></li>
-													<li>
-														<form class="search_form">
-															<p>
-																<input type="text" value="" name="search" id="search">
-																<label for="search">search</label>
-															</p>
-															<a href="#" class="search_btn"><i class="flaticon-magnifier-tool"></i></a>
-														</form>
-													</li>
-												</ul>
-											</li>
 										</ul>
 									</div>
 								</div>

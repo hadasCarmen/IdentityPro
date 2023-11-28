@@ -7,8 +7,25 @@
     <p>your order has been recived.</p>
     <p>Order date: @DateTime.Now.ToString("yyyy-MM-dd")</p>
     <p>Delivery date: @(DateTime.Now.AddDays(14).ToString("yyyy-MM-dd"))</p>
+    <div class="shortcode_section">
+        <div class="shortcodes_wrapper">
+        <div class="button_wrapper">
+        <a href="#" id="okButton" class="btn btn-info">OK</a>
+    </div>  
+    </div>
+    </div>
 </div>
+
 <script>
-    // Remove orderId from local storage
-    localStorage.removeItem('orderid');
+    localStorage.clear();
+
+    // Function to handle the "OK" button click
+    function handleOkButtonClick() {
+        // Remove orderId from local storage
+        // Optionally, redirect to another page or perform additional actions
+	    window.location.href = '/Default/Home';
+    }
+
+    // Attach the click event handler to the "OK" button
+    document.getElementById('okButton').addEventListener('click', handleOkButtonClick);
 </script>

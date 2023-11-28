@@ -9,7 +9,7 @@
             <a class="ice_btn" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
     </li>
         <li class="cart_section">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Home", "Default", new { area = "" })">
                 <button type="submit" class="ice_btn">Logout</button>
         </form>
     </li>

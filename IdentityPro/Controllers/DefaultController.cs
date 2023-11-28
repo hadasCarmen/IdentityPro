@@ -62,34 +62,7 @@ namespace IdentityPro.Controllers
         {
             //int userId = int.Parse(orderId);
             //string myId = orderId;
-            Order userOrder;
-            if (orderId == -1 )
-            {
-                var newWeather = new Weather
-                {
-                    Date = DateTime.Now, // Set the date
-
-                };
-
-                // If no active order exists, create a new one
-                userOrder = new Order
-                {
-                    CreatedDate = DateTime.Now,
-                    DeliveryDate = null,       // Set the delivery date (if applicable)
-                    Products = new List<OrderItem>(),
-                    Weather = newWeather      // Associate the Weather entity with the Order
-
-                };
-                _context.Order.Add(userOrder);
-            }
-            else 
-            {
-                    userOrder = _context.Order
-                   .Include(o => o.Products)
-                   .Where(o => o.Id == orderId && o.DeliveryDate == null)
-                   .FirstOrDefault();
-                
-            }
+            Order userOrder = CreateOrder(orderId);
             // Pass the user's order as the model to the cart view
             if (userOrder != null)
             {
@@ -133,24 +106,11 @@ namespace IdentityPro.Controllers
             if (userName == null)
             {
                 ViewBag.ErrorMessage = "Please register first.";
-                return View("Error");
             }
-            //return View();
             // Initialize InputModel with a new instance
             Input = new InputModel();
 
-            Input.MyOrder = orderId == -1
-                ? new Order
-                {
-                    CreatedDate = null,
-                    DeliveryDate = null,
-                    Products = new List<OrderItem>(),
-                    Weather = new Weather { Date = DateTime.Now }
-                }
-                : _context.Order
-                    .Include(o => o.Products)
-                    .Where(o => o.Id == orderId && o.DeliveryDate == null)
-                    .FirstOrDefault();
+            Input.MyOrder = CreateOrder(orderId);
 
             if (Input.MyOrder == null && orderId != -1)
             {
@@ -163,9 +123,9 @@ namespace IdentityPro.Controllers
         }
         // POST: DefaultController/UpdateCheckout
         [HttpPost]
-        public ActionResult UpdateCheckout(InputModel model, int orderid)
+        public ActionResult UpdateCheckout(InputModel model, int orderId)
         {
-            int myId = orderid;
+            int myId = orderId;
             string userName = User.Identity?.Name;
             IdentityUser user = _userManager.FindByNameAsync(userName).Result;
             ApplicationUser applicationUser = (ApplicationUser)user;
@@ -184,21 +144,10 @@ namespace IdentityPro.Controllers
 
                 if (result.Succeeded)
                 {
-
-                  model.MyOrder = orderid == -1
-                ? new Order
-                {
-                    CreatedDate = DateTime.Now,
-                    DeliveryDate = DateTime.Now.AddDays(14),
-                    Products = new List<OrderItem>(),
-                    Weather = new Weather { Date = DateTime.Now }
-                }
-                : _context.Order
-                    .Include(o => o.Products)
-                    .Where(o => o.Id == orderid && o.DeliveryDate == null)
-                    .FirstOrDefault();
+                    model.MyOrder = CreateOrder(orderId);
                     model.MyOrder.CreatedDate = DateTime.Now;
                     model.MyOrder.DeliveryDate = DateTime.Now.AddDays(14);
+                    _context.SaveChanges();
                     // Continue with the checkout process or redirect to a success page
                     return RedirectToAction("Index", "Home");
                 }
@@ -293,6 +242,46 @@ namespace IdentityPro.Controllers
             return RedirectToAction("Cart", new { orderId = orderId });
         }
 
+        public Order CreateOrder(int orderId)
+        {
+            string userName = User.Identity?.Name;
+            IdentityUser user = _userManager.FindByNameAsync(userName).Result;
+            ApplicationUser applicationUser = (ApplicationUser)user;
+            Order userOrder;
+            if (orderId == -1)
+            {
+                var newWeather = new Weather
+                {
+                    Date = DateTime.Now, // Set the date
+
+                };
+                var orderUser =  applicationUser;
+
+                // If no active order exists, create a new one
+                userOrder = new Order
+                {
+                    CreatedDate = DateTime.Now,
+                    DeliveryDate = null,       // Set the delivery date (if applicable)
+                    Products = new List<OrderItem>(),
+                    Weather = newWeather      // Associate the Weather entity with the Order
+
+                };
+                _context.Order.Add(userOrder);
+            }
+            else
+            {
+                userOrder = _context.Order
+                .Include(o=>o.User)
+               .Include(o => o.Products)
+               .Where(o => o.Id == orderId && o.DeliveryDate == null)
+               .FirstOrDefault();
+                userOrder.User = applicationUser;
+            }
+            return userOrder;
+        }
+
     }
+
+    
 
 }

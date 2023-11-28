@@ -399,30 +399,37 @@ input:focus, textarea:focus, select:focus, button:focus {
 	-o-transition: all 0.5s ease-in-out;
 	-webkit-transition: all 0.5s ease-in-out;
 }
-.header_wrapper .ice_logo{
-    width: 100px;
-    float: left;
-    
+.header_wrapper {
+	display: flex;
+	align-items: center; /* Align items vertically in the center */
 }
-.header_wrapper .ice_menu_wraper{
-    width: calc(100% - 85px);
-    float: left;
-    padding-left: 45px;
-    margin-top: 15px;
-    margin-left: -15px;
-    border-left: none;
-    -webkit-border-top-right-radius: 20px;
-    -webkit-border-bottom-right-radius: 20px;
-    -moz-border-radius-top-right: 20px;
-    -moz-border-radius-bottom-right: 20px;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    background-image: -moz-radial-gradient( -23px 50%, /* the -23px left position varies by your "gap" */ circle closest-corner, /* keep radius to half height */ transparent 0, /* transparent at center */ transparent 55px, /*transparent at edge of gap */ black 56px, /* start circle "border" */ grey 57px /* end circle border and begin color of rest of background */ );
-    background-image: -webkit-radial-gradient(-23px 50%, circle closest-corner, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 55px, white 56px, white 57px);
-    background-image: -ms-radial-gradient(-23px 50%, circle closest-corner, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 55px, white 56px, white 57px);
-    background-image: -o-radial-gradient(-23px 50%, circle closest-corner, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 55px, white 56px, white 57px);
-    background-image: -moz-radial-gradient(-23px 50%, circle closest-corner, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 55px, white 56px, white 57px);
-}
+	.header_wrapper .ice_logo {
+		width: 100px;
+		float: left;
+		flex: none;
+	}
+	.header_wrapper .ice_menu_wraper {
+		width: fit-content;
+		float: left;
+		padding-left: 45px;
+		margin-top: 15px;
+		margin-left: -15px;
+		border-left: none;
+		-webkit-border-top-right-radius: 20px;
+		-webkit-border-bottom-right-radius: 20px;
+		-moz-border-radius-top-right: 20px;
+		-moz-border-radius-bottom-right: 20px;
+		border-top-right-radius: 20px;
+		border-bottom-right-radius: 20px;
+		background-image: -moz-radial-gradient( -23px 50%, /* the -23px left position varies by your "gap" */ circle closest-corner, /* keep radius to half height */ transparent 0, /* transparent at center */ transparent 55px, /*transparent at edge of gap */ black 56px, /* start circle "border" */ grey 57px /* end circle border and begin color of rest of background */ );
+		background-image: -webkit-radial-gradient(-23px 50%, circle closest-corner, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 55px, white 56px, white 57px);
+		background-image: -ms-radial-gradient(-23px 50%, circle closest-corner, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 55px, white 56px, white 57px);
+		background-image: -o-radial-gradient(-23px 50%, circle closest-corner, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 55px, white 56px, white 57px);
+		background-image: -moz-radial-gradient(-23px 50%, circle closest-corner, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 55px, white 56px, white 57px);
+		align-self: flex-start;
+		flex: none;
+	}
+	
 /**menu css start**/
 .ice_menu {
     float: left;
