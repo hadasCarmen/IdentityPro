@@ -3,10 +3,10 @@
 $(document).ready(function () {
     // Function to handle click on "view cart" link
     function onViewCartClick() {
-        console.log('123!#' + orderId);
 
         // Retrieve the orderId from local storage
         var orderId = localStorage.getItem('orderId');
+        console.log('123!#' + orderId);
 
         // Parse orderId as an integer (or default to -1 if it's not a valid integer)
         var myId = parseInt(orderId) || -1;
@@ -20,6 +20,27 @@ $(document).ready(function () {
 
     // Attach click event handler to the "view cart" link
     $('#view-cart-link').on('click', onViewCartClick);
+
+
+    // Function to handle click on "view cart" link
+    function onViewCheckoutClick() {
+
+        // Retrieve the orderId from local storage
+        var orderId = localStorage.getItem('orderId');
+        console.log('123!#' + orderId);
+
+        // Parse orderId as an integer (or default to -1 if it's not a valid integer)
+        var myId = parseInt(orderId) || -1;
+
+        // Construct the URL based on myId
+        var url = '/Default/Checkout?orderId=' + myId; // Correct the controller name here
+
+        // Redirect to the URL
+        window.location.href = url;
+    }
+
+    // Attach click event handler to the "view cart" link
+    $('#view-checkout-link').on('click', onViewCheckoutClick);
 
 
     // Retrieve the orderId from local storage

@@ -4,26 +4,28 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace IdentityPro.Controllers
 {
     public class DefaultController : Controller
     {
         private readonly Ice_cream_shopContext _context;
-        private readonly IEnumerable<Order> userOrder;
+        private readonly ApplicationDbContext _user_context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-
-        public DefaultController(Ice_cream_shopContext context)
+        public DefaultController(Ice_cream_shopContext context, ApplicationDbContext user_context, UserManager<IdentityUser> userManager)
         {
             _context = context;
-            userOrder = context.Order;
+            _user_context = user_context;
+            _userManager = userManager;
         }
         // GET: DefaultController
         public ActionResult Home()
         {
             return View();
         }
-
         // GET: DefaultController/About
         public ActionResult About()
         {
@@ -100,16 +102,117 @@ namespace IdentityPro.Controllers
             }
         }
 
+        [BindProperty]
+        public InputModel Input { get; set; }
+
+        public class InputModel
+        {
+
+            [Required]
+            public string City { get; set; }
+
+            [Required]
+            public string Street { get; set; }
+
+            [Required]
+            public string Apartment { get; set; }
+
+            [Required]
+            public int ZipCode { get; set; }
+           
+            [Required]
+            public Order MyOrder { get; set; }
+
+        }
+
+
         // GET: DefaultController/Checkout
-        public ActionResult Checkout()
+        public ActionResult Checkout(int orderId)
         {
             string userName = User.Identity?.Name;
-            if(userName == null)
+            if (userName == null)
             {
-                TempData["RegisterMessage"] = "Please register to access this feature.";
-                return RedirectToPage("/Account/Register", new { area = "Identity" });
+                ViewBag.ErrorMessage = "Please register first.";
+                return View("Error");
             }
-            return View();
+            //return View();
+            // Initialize InputModel with a new instance
+            Input = new InputModel();
+
+            Input.MyOrder = orderId == -1
+                ? new Order
+                {
+                    CreatedDate = null,
+                    DeliveryDate = null,
+                    Products = new List<OrderItem>(),
+                    Weather = new Weather { Date = DateTime.Now }
+                }
+                : _context.Order
+                    .Include(o => o.Products)
+                    .Where(o => o.Id == orderId && o.DeliveryDate == null)
+                    .FirstOrDefault();
+
+            if (Input.MyOrder == null && orderId != -1)
+            {
+                // Return an error message or handle the case when the order is not found
+                return Problem($"Order with ID {orderId} not found.");
+            }
+
+            // Pass the InputModel as the model to the view
+            return View(Input);
+        }
+        // POST: DefaultController/UpdateCheckout
+        [HttpPost]
+        public ActionResult UpdateCheckout(InputModel model, int orderid)
+        {
+            int myId = orderid;
+            string userName = User.Identity?.Name;
+            IdentityUser user = _userManager.FindByNameAsync(userName).Result;
+            ApplicationUser applicationUser = (ApplicationUser)user;
+
+            if (applicationUser != null)
+            {
+                // Modify the user's fields based on the form data
+                applicationUser.City = model.City.ToString();
+                applicationUser.Street = model.Street.ToString();
+                applicationUser.Apartment = model.Apartment.ToString();
+                applicationUser.ZipCode = model.ZipCode;
+                user = applicationUser;
+                // Save changes to the database
+                var result = _userManager.UpdateAsync(user).Result;
+                _user_context.SaveChanges();
+
+                if (result.Succeeded)
+                {
+
+                  model.MyOrder = orderid == -1
+                ? new Order
+                {
+                    CreatedDate = DateTime.Now,
+                    DeliveryDate = DateTime.Now.AddDays(14),
+                    Products = new List<OrderItem>(),
+                    Weather = new Weather { Date = DateTime.Now }
+                }
+                : _context.Order
+                    .Include(o => o.Products)
+                    .Where(o => o.Id == orderid && o.DeliveryDate == null)
+                    .FirstOrDefault();
+                    model.MyOrder.CreatedDate = DateTime.Now;
+                    model.MyOrder.DeliveryDate = DateTime.Now.AddDays(14);
+                    // Continue with the checkout process or redirect to a success page
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Failed to update user information.";
+                    return View("Error"); // Handle error scenario
+                }
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "User not found.";
+                return View("Error"); // Handle the case where the user is not found
+            }
         }
 
 

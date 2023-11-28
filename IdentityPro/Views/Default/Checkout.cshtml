@@ -1,56 +1,61 @@
-﻿@{
+﻿@model IdentityPro.Controllers.DefaultController.InputModel 
+@{
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="ice_main_section1">
 	<div class="container">
-		<div id="success-message" class="success-message hidden">
-			Product added to the cart! 🍓
-		</div>
+		@if(ViewBag.ErrorMessage != null)
+{
+			<script>
+				alert("@ViewBag.ErrorMessage");
+				redirectToSpecificPage();
+				function redirectToSpecificPage() {
+					window.location.href = '/Identity/Account/Register'; // Replace with your actual page URL
+				}
+			</script>
+}
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="woocommerce">
-					<div class="woocommerce-info">Have a coupon? <a href="#" class="showcoupon">Click here to enter your code</a></div>
 					<div class="row">
-						<form  name="checkout" method="post" class="checkout woocommerce-checkout col-sm-12" action="#">
+						<form asp-controller="Default" asp-action="UpdateCheckout" method="post" class="checkout woocommerce-checkout col-sm-12">
+							<input type="hidden" name="orderid" value="@Model.MyOrder.Id" />
 							<div class="row">
 								<div class="col-md-6">
 									<div class="customer_details">
 										<div class="woocommerce-billing-fields">
 											<h3>Billing Details</h3>
-											
+
 											<p>
-												<input type="text" name="billing_city" id="billing_city" value="">
-												<label for="billing_city">Town / City <span class="required" title="required">*</span></label>
+												<label asp-for="City" class="form-label"></label>
+												<input asp-for="City" class="input-text" />
+												<span asp-validation-for="City" class="text-danger"></span>
 											</p>
+
 											<p>
-												<input type="text" class="input-text " name="billing_address_1" id="billing_address_1" value="">
-												<label for="billing_address_1">Street address</label>
+												<label asp-for="Street" class="form-label"></label>
+												<input asp-for="Street" class="input-text" />
+												<span asp-validation-for="Street" class="text-danger"></span>
 											</p>
+
 											<p>
-												<input type="text" class="input-text " name="billing_address_2" id="billing_address_2" value="">
-												<label for="billing_address_2">Apartment, suite, unit etc. (optional)</label>
+												<label asp-for="Apartment" class="form-label"></label>
+												<input asp-for="Apartment" class="input-text" />
+												<span asp-validation-for="Apartment" class="text-danger"></span>
 											</p>
+
 											<div class="row">
 												<div class="col-lg-6 col-md-6">
 													<p>
-														<input type="text" name="billing_postcode" id="billing_postcode" value="">
-														<label for="billing_postcode">Zip <span class="required" title="required">*</span></label>
+														<label asp-for="ZipCode" class="form-label"></label>
+														<input asp-for="ZipCode" />
+														<span asp-validation-for="ZipCode" class="text-danger"></span>
 													</p>
 												</div>
 											</div>
-											<div class="ice_check_box">
-												<input type="checkbox" id="cat1" name="cat1">
-												<label for="cat1">create an account</label>
-											</div>
-											<div class="create-account">
-												<p>Create an account by entering the information below. If you are a returning customer please login at the top of the page.</p>
-												<p>
-													<input type="password" class="input-text " name="account_password" id="account_password" value="">
-													<label for="account_password">Account password <span class="required" title="required">*</span></label>
-												</p>
-											</div>
+											
 										</div>
 										<div class="woocommerce-shipping-fields">
 											<h3>Additional Information</h3>
@@ -75,47 +80,33 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr class="cart_item">
-													<td class="product-name">
-														Flying Ninja&nbsp;
-														<strong class="product-quantity">× 1</strong>
-													</td>
-													<td class="product-total">
-														<div><span class="amount">$12.00</span></div>
-													</td>
+											<!-- Loop through cart items and display them as table rows -->
+											@if (Model.MyOrder.Products != null && Model.MyOrder.Products.Any())
+											{
+												@for (var i = 0; i < Model.MyOrder.Products.Count; i++)
+												{
+													var product = Model.MyOrder.Products[i];
+													<tr class="cart_item">
+															<td class="product-thumbnail">
+																<a href="#"><img src="/images/shop/@product.ImagePath" alt="@product.Name" class="img-responsive cart-item-image small-image-checkout"></a>
+															</td>
+														<td class="product-name">
+															@product.Name&nbsp;
+															<strong class="product-quantity">× @product.Amount</strong>
+														</td>
+														<td class="product-total">
+															<div><span class="amount">$@(product.Price * product.Amount)</span></div>
+														</td>
+													</tr>
+												}
+											}
+											else
+											{
+												<tr>
+													<td colspan="2">Your cart is empty.</td>
 												</tr>
-												<tr class="cart_item">
-													<td class="product-name">
-														Happy Ninja&nbsp;
-														<strong class="product-quantity">× 1</strong>
-													</td>
-													<td class="product-total">
-														<div><span class="amount">$18.00</span></div>
-													</td>
-												</tr>
-												<tr class="cart_item">
-													<td class="product-name">
-														Happy Ninja&nbsp;<strong class="product-quantity">× 1</strong>
-													</td>
-													<td class="product-total">
-														<div><span class="amount">$35.00</span></div>
-													</td>
-												</tr>
-												<tr class="cart_item">
-													<td class="product-name">Ninja Silhouette&nbsp;<strong class="product-quantity">× 1</strong></td>
-													<td class="product-total">
-														<div><span class="amount">$20.00</span></div>
-													</td>
-												</tr>
-												<tr class="cart_item">
-													<td class="product-name">
-														Ninja Silhouette&nbsp;<strong class="product-quantity">× 1</strong>
-													</td>
-													<td class="product-total">
-														<div><span class="amount">$35.00</span></div>
-													</td>
-												</tr>
-											</tbody>
+											}
+										</tbody>
 											<tfoot>
 												<tr class="cart-subtotal">
 													<th>Subtotal</th>
@@ -165,18 +156,10 @@
 		</div>
 	</div>
 </div>
+
 <script>
-	$(document).ready(function () {
-		var successMessage = document.getElementById("success-message");
-		// Check if TempData contains the registration message
-		var registerMessage = '@TempData["RegisterMessage"]';
-		console.log(registerMessage);
-		if (registerMessage) {
-			successMessage.innerText = registerMessage; // Set the message
-			successMessage.classList.remove("hidden");
-			setTimeout(function () {
-				successMessage.classList.add("hidden"); // Hide the message
-			}, 3000);
-		}
-	});
+    // Set the value of the hidden input field with the orderid from local storage
+    document.getElementById('orderid').value = localStorage.getItem('orderid');
+
 </script>
+
