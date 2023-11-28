@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using IceCreamShopGateway.Services;
+
 
 namespace IdentityPro.Controllers
 {
@@ -14,12 +19,14 @@ namespace IdentityPro.Controllers
         private readonly Ice_cream_shopContext _context;
         private readonly ApplicationDbContext _user_context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly AddressService _addressService;
 
-        public DefaultController(Ice_cream_shopContext context, ApplicationDbContext user_context, UserManager<IdentityUser> userManager)
+        public DefaultController(Ice_cream_shopContext context, ApplicationDbContext user_context, UserManager<IdentityUser> userManager, AddressService addressService)
         {
             _context = context;
             _user_context = user_context;
             _userManager = userManager;
+            _addressService = addressService;
         }
         // GET: DefaultController
         public ActionResult Home()
@@ -121,6 +128,24 @@ namespace IdentityPro.Controllers
             // Pass the InputModel as the model to the view
             return View(Input);
         }
+
+        public bool AddressCheck(string city, string street)
+        {
+            try
+            {
+                // Call the AddressService from the gateway project synchronously
+                bool? result = _addressService.CheckAddressExistence(city, street).Result;
+
+                // If the result is not null, return its value; otherwise, return false
+                return result ?? false;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions (e.g., log the exception)
+                return false; // Assuming false is the default value in case of an exception
+            }
+        }
+
         // POST: DefaultController/UpdateCheckout
         [HttpPost]
         public ActionResult UpdateCheckout(InputModel model, int orderId)
@@ -130,7 +155,7 @@ namespace IdentityPro.Controllers
             IdentityUser user = _userManager.FindByNameAsync(userName).Result;
             ApplicationUser applicationUser = (ApplicationUser)user;
 
-            if (applicationUser != null)
+            if (applicationUser != null && AddressCheck(model.City.ToString(), model.Street.ToString()) == true)
             {
                 // Modify the user's fields based on the form data
                 applicationUser.City = model.City.ToString();
