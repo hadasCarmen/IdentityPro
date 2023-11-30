@@ -109,6 +109,8 @@
                                                         {
                                                             var total = Model.Products.Sum(product => product.Price * product.Amount);
                                                             <strong><span class="amount">$@total</span></strong>
+                                                            <input type="hidden" id="cartTotal" value="@Model.Products.Sum(product => product.Price * product.Amount)" />
+
                                                         }
                                                         else
                                                         {

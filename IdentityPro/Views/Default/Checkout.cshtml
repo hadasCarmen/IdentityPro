@@ -129,8 +129,9 @@
 												</li>
 												<li>
 													<div class="ice_radio_box">
-														<input type="radio" id="radio2" name="radio">
-														<label for="radio2">PayPal</label>
+														<a href="/PaymentWithPayPal/Index?orderAmount=" + orderAmount class="btn btn-primary">Pay with PayPal</a>
+														@*<input type="radio" id="radio2" name="radio">
+														<label for="radio2">PayPal</label>*@
 													</div>
 												</li>
 											</ul>
@@ -160,6 +161,6 @@
 <script>
     // Set the value of the hidden input field with the orderid from local storage
     document.getElementById('orderid').value = localStorage.getItem('orderid');
-
+	var orderAmount = document.getElementById('cartTotal').value;
 </script>
 

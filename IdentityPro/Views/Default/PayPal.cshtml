@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="heading_container heading_center ">
+    <h1>Pay With PayPal</h1>
+    <h4>continue order</h4>
+</div>
+
+<div id="smart-button-container">
+    <div style="text-align: center;">
+        <div id="paypal-button-container"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://www.paypal.com/sdk/js?client-id=AZesLYVbVinD8hRnnzHtOsZtv9L7cbipx-m2YDLZDt7TtKmHFIFYR36fxCXeWHOxVmdpxScQ4dqDBjfz&components=buttons" data-sdk-integration-source="button-factory"></script>
+
+    <script>
+        function initPayPalButton() {
+            paypal.Buttons({
+                style: {
+                    shape: 'rect',
+                    color: 'gold',
+                    layout: 'vertical',
+                    label: 'paypal',
+                },
+
+                createOrder: function (data, actions) {
+                    // Create an order object with the purchase details
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: 21.06, // Replace with actual order amount
+                                currency_code: "ILS"
+                            },
+                            description: "ice cream"
+                        }]
+                    });
+                },
+
+                onApprove: function (data, actions) {
+                    // Capture the order details and redirect to the checkout page
+                    return actions.order.capture().then(function (orderData) {
+                        // Send the order details to your server for processing
+                        console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+                        // Redirect the user to the checkout page
+                        window.location.href = '/Checkout/CompleteOrder';
+                    });
+                },
+
+                onError: function (err) {
+                    console.error(err);
+                }
+            }).render('#paypal-button-container');
+        }
+        initPayPalButton();
+    </script>
+}
