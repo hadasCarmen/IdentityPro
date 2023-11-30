@@ -7,6 +7,16 @@
 
 <div class="ice_main_section1">
     <div class="container">
+       @if(ViewBag.ErrorMessage != null)
+{
+			<script>
+				alert("@ViewBag.ErrorMessage");
+				redirectToSpecificPage();
+				function redirectToSpecificPage() {
+					window.location.href = '/Identity/Account/Register'; // Replace with your actual page URL
+				}
+			</script>
+}
         <div class="row">
             <div class="col-lg-12">
                 <div class="woocommerce">
@@ -110,6 +120,15 @@
                                         </table>
                                         <div class="wc-proceed-to-checkout">
                                             <button type="submit" class="checkout-button ice_btn alt wc-forward" name="update_cart" value="Update Cart">Update Cart</button>
+                                            @if (!Model.Products.Any()) // Replace with your logic to check if the cart is empty
+                                            {
+                                                <button id="view-checkout-link" class="ice_btn" style="display:none;">proceed to checkout</button>
+
+                                            }
+                                            else
+                                            {
+                                                <button id="view-checkout-link" class="ice_btn" >proceed to checkout</button>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -124,9 +143,32 @@
 
 
 <!-- JavaScript Code -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/js/cart.js"></script>
 <script>
+
+    // Function to handle click on "view checkout" link
+    function onViewCheckoutClick(event) {
+        // Prevent the default behavior (page reload) of the button click
+        event.preventDefault();
+
+        // Retrieve the orderId from local storage
+        var orderId = localStorage.getItem('orderId');
+        console.log('123!#' + orderId);
+
+        // Parse orderId as an integer (or default to -1 if it's not a valid integer)
+        var myId = parseInt(orderId) || -1;
+
+        // Construct the URL based on myId
+        var url = '/Default/Checkout?orderId=' + myId; // Correct the controller name here
+
+        // Redirect to the URL
+        window.location.href = url;
+    }
+
+    // Attach click event handler to the "view checkout" link
+    $(document).on('click', '#view-checkout-link', onViewCheckoutClick);
+
 	function removeProduct(productId) {
 		var orderId = localStorage.getItem("orderId");
 

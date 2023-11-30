@@ -17,13 +17,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
-    <PackageReference Include="PayPal" Version="1.9.1" />
-    <PackageReference Include="PayPalCheckoutSdk" Version="1.0.4" />
-    <PackageReference Include="PayPalCoreSDK" Version="1.7.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MiriOrdentlich\IceCreamShopGateway\IceCreamShopGateway\IceCreamShopGateway.csproj" />
+    <ProjectReference Include="..\..\MiriOrdentlich\IceCreamShopGateway\IceCreamShopGateway\IceCreamShopGateway.csproj" />
   </ItemGroup>
 
 </Project>

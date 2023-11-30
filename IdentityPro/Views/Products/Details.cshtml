@@ -1,58 +1,4 @@
-﻿@*@model Ice_cream_shop.Models.Product
-
-@{
-    ViewData["Title"] = "Details";
-}
-
-<h2>Details</h2>
-
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd>
-            $@Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Amount)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Amount)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
-        <dd>
-            <img src="/images/shop/@Model.ImagePath" alt="Product Image" class="small-image">
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Flavor)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Flavor)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-*@
+﻿
 
 
 @model IdentityPro.Models.Product
@@ -69,21 +15,8 @@
     <h2 class="ice_heading">@Html.DisplayFor(model => model.Name)</h2>
     <h1>$@Html.DisplayFor(model => model.Price)</h1>
     <p>@Html.DisplayFor(model => model.Description)</p>
-    <div class="quantity_wrapper">
-        <div class="input-group">
-            <span class="input-group-btn">
-                <button type="button" class="quantity-left-minus btn btn-number" data-type="minus" data-field="">
-                    <span class="glyphicon glyphicon-minus"></span>
-                </button>
-            </span>
-            <input type="text" id="quantity" name="quantity" class="form-control input-number quantity" value="@Html.DisplayFor(model => model.Amount)">
-            <span class="input-group-btn">
-                <button type="button" class="quantity-right-plus btn btn-number" data-type="plus" data-field="">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </button>
-            </span>
-        </div>
-    </div>
+    <p>@Html.DisplayFor(model => model.Amount) left</p>
+
 </div>
 
 

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityPro", "IdentityPro\IdentityPro.csproj", "{0390B6C5-B861-4D0A-A0B9-CF689D964324}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IceCreamShopGateway", "..\..\MiriOrdentlich\IceCreamShopGateway\IceCreamShopGateway\IceCreamShopGateway.csproj", "{BE44128C-80D1-4D45-81F7-C71521284640}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IceCreamShopGateway", "..\MiriOrdentlich\IceCreamShopGateway\IceCreamShopGateway\IceCreamShopGateway.csproj", "{99ECDA6C-DE6C-4383-A4CC-44C1FC945668}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{0390B6C5-B861-4D0A-A0B9-CF689D964324}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0390B6C5-B861-4D0A-A0B9-CF689D964324}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0390B6C5-B861-4D0A-A0B9-CF689D964324}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE44128C-80D1-4D45-81F7-C71521284640}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE44128C-80D1-4D45-81F7-C71521284640}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE44128C-80D1-4D45-81F7-C71521284640}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE44128C-80D1-4D45-81F7-C71521284640}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99ECDA6C-DE6C-4383-A4CC-44C1FC945668}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99ECDA6C-DE6C-4383-A4CC-44C1FC945668}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99ECDA6C-DE6C-4383-A4CC-44C1FC945668}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99ECDA6C-DE6C-4383-A4CC-44C1FC945668}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,7 +11,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using IceCreamShopGateway.Services;
 
-
 namespace IdentityPro.Controllers
 {
     public class DefaultController : Controller
@@ -19,14 +18,16 @@ namespace IdentityPro.Controllers
         private readonly Ice_cream_shopContext _context;
         private readonly ApplicationDbContext _user_context;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly AddressService _addressService;
+        //private readonly AddressService _addressService;
 
-        public DefaultController(Ice_cream_shopContext context, ApplicationDbContext user_context, UserManager<IdentityUser> userManager, AddressService addressService)
+
+        public DefaultController(Ice_cream_shopContext context, ApplicationDbContext user_context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _user_context = user_context;
             _userManager = userManager;
-            _addressService = addressService;
+           // _addressService = addressService;
+
         }
         // GET: DefaultController
         public ActionResult Home()
@@ -67,18 +68,24 @@ namespace IdentityPro.Controllers
 
         public IActionResult Cart(int orderId)
         {
-            //int userId = int.Parse(orderId);
-            //string myId = orderId;
-            Order userOrder = CreateOrder(orderId);
-            // Pass the user's order as the model to the cart view
-            if (userOrder != null)
+            try
             {
-                return View(userOrder);
+                Order userOrder = CreateOrder(orderId);
+                // Pass the user's order as the model to the cart view
+                if (userOrder != null)
+                {
+                    return View(userOrder);
+                }
+                else
+                {
+                    // Return an error message or handle the case when the order is not found
+                    return Problem($"Order with ID {orderId} not found.");
+                }
             }
-            else
+            catch
             {
-                // Return an error message or handle the case when the order is not found
-                return Problem($"Order with ID {orderId} not found.");
+                ViewBag.ErrorMessage = "Please register first.";
+                return RedirectToAction("Error", "Home");
             }
         }
 
@@ -110,41 +117,48 @@ namespace IdentityPro.Controllers
         public ActionResult Checkout(int orderId)
         {
             string userName = User.Identity?.Name;
+            Input = new InputModel();
             if (userName == null)
             {
                 ViewBag.ErrorMessage = "Please register first.";
+                return RedirectToAction("Error", "Home");
+
             }
             // Initialize InputModel with a new instance
-            Input = new InputModel();
-
-            Input.MyOrder = CreateOrder(orderId);
-
-            if (Input.MyOrder == null && orderId != -1)
-            {
-                // Return an error message or handle the case when the order is not found
-                return Problem($"Order with ID {orderId} not found.");
-            }
-
-            // Pass the InputModel as the model to the view
-            return View(Input);
-        }
-
-        public bool AddressCheck(string city, string street)
-        {
             try
-            {
-                // Call the AddressService from the gateway project synchronously
-                bool? result = _addressService.CheckAddressExistence(city, street).Result;
+                {
+                    Input.MyOrder = CreateOrder(orderId);
+                }
+                catch
+                {
+                    ViewBag.ErrorMessage = "Please register first.";
+                    return Redirect("https://localhost:7284/Identity/Account/Register");
+                }
 
-                // If the result is not null, return its value; otherwise, return false
-                return result ?? false;
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions (e.g., log the exception)
-                return false; // Assuming false is the default value in case of an exception
-            }
+                if (Input.MyOrder == null && orderId != -1)
+                {
+                    // Return an error message or handle the case when the order is not found
+                    return Problem($"Order with ID {orderId} not found.");
+                }
+                        return View(Input);
         }
+
+        //public bool AddressCheck(string city, string street)
+        //{
+        //    try
+        //    {
+        //        // Call the AddressService from the gateway project synchronously
+        //        bool? result = _addressService.CheckAddressExistence(city, street).Result;
+
+        //        // If the result is not null, return its value; otherwise, return false
+        //        return result ?? false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false; // Assuming false is the default value in case of an exception
+        //    }
+        //}
+
 
         // POST: DefaultController/UpdateCheckout
         [HttpPost]
@@ -155,7 +169,7 @@ namespace IdentityPro.Controllers
             IdentityUser user = _userManager.FindByNameAsync(userName).Result;
             ApplicationUser applicationUser = (ApplicationUser)user;
 
-            if (applicationUser != null && AddressCheck(model.City.ToString(), model.Street.ToString()) == true)
+            if (applicationUser != null)
             {
                 // Modify the user's fields based on the form data
                 applicationUser.City = model.City.ToString();
@@ -169,7 +183,14 @@ namespace IdentityPro.Controllers
 
                 if (result.Succeeded)
                 {
-                    model.MyOrder = CreateOrder(orderId);
+                    try
+                    {
+                        model.MyOrder = CreateOrder(orderId);
+                    }
+                    catch
+                    {
+                        ViewBag.ErrorMessage = "Please register first.";
+                    }
                     model.MyOrder.CreatedDate = DateTime.Now;
                     model.MyOrder.DeliveryDate = DateTime.Now.AddDays(14);
                     _context.SaveChanges();
@@ -270,43 +291,70 @@ namespace IdentityPro.Controllers
         public Order CreateOrder(int orderId)
         {
             string userName = User.Identity?.Name;
-            IdentityUser user = _userManager.FindByNameAsync(userName).Result;
-            ApplicationUser applicationUser = (ApplicationUser)user;
-            Order userOrder;
-            if (orderId == -1)
+
+            if (userName == null)
             {
-                var newWeather = new Weather
-                {
-                    Date = DateTime.Now, // Set the date
-
-                };
-                var orderUser =  applicationUser;
-
-                // If no active order exists, create a new one
-                userOrder = new Order
-                {
-                    CreatedDate = DateTime.Now,
-                    DeliveryDate = null,       // Set the delivery date (if applicable)
-                    Products = new List<OrderItem>(),
-                    Weather = newWeather      // Associate the Weather entity with the Order
-
-                };
-                _context.Order.Add(userOrder);
+                throw new ArgumentNullException(nameof(userName));
             }
             else
             {
-                userOrder = _context.Order
-                .Include(o=>o.User)
-               .Include(o => o.Products)
-               .Where(o => o.Id == orderId && o.DeliveryDate == null)
-               .FirstOrDefault();
-                userOrder.User = applicationUser;
+                IdentityUser user = _userManager.FindByNameAsync(userName).Result;
+                ApplicationUser applicationUser = (ApplicationUser)user;
+                Order userOrder;
+
+                if (orderId == -1)
+                {
+                    // Check if an active order already exists for the user
+                    userOrder = _context.Order
+                        .Include(o => o.User)
+                        .Where(o => o.User.Id == applicationUser.Id && o.DeliveryDate == null)
+                        .FirstOrDefault();
+
+                    if (userOrder == null)
+                    {
+                        // If no active order exists, create a new one
+                        var newWeather = new Weather
+                        {
+                            Date = DateTime.Now, // Set the date
+                        };
+
+                        // Associate the Weather entity with the Order
+                        userOrder = new Order
+                        {
+                            CreatedDate = DateTime.Now,
+                            DeliveryDate = null,       // Set the delivery date (if applicable)
+                            Products = new List<OrderItem>(),
+                            Weather = newWeather,
+                            User = applicationUser  // Associate the ApplicationUser with the Order
+                        };
+
+                        _context.Order.Add(userOrder);
+                    }
+                    // else: An active order already exists, no need to create a new one
+                }
+                else
+                {
+                    // Update existing order's user (check if it's necessary)
+                    userOrder = _context.Order
+                        .Include(o => o.User)
+                        .Include(o => o.Products)
+                        .Where(o => o.Id == orderId && o.DeliveryDate == null)
+                        .FirstOrDefault();
+
+                    if (userOrder != null)
+                    {
+                        userOrder.User = applicationUser;
+                    }
+                    // else: The order with orderId doesn't exist or is already delivered
+                }
+
+                return userOrder;
             }
-            return userOrder;
         }
+
 
     }
 
-    
+
 
 }

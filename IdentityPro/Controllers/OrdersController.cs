@@ -25,7 +25,8 @@ namespace IdentityPro.Controllers
         public async Task<IActionResult> Index()
         {
             return _context.Order != null ?
-                        View(await _context.Order.Include(o => o.Products).ToListAsync()) :
+                        View(await _context.Order.Include(o => o.Products).Include(o=>o.User).
+                        ToListAsync()) :
                         Problem("Entity set 'Ice_cream_shopContext.Order'  is null.");
         }
 
