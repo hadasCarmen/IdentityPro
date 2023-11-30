@@ -39,6 +39,7 @@ $(document).ready(function () {
         window.location.href = url;
     }
 
+
     // Attach click event handler to the "view cart" link
     $('#view-checkout-link').on('click', onViewCheckoutClick);
 
@@ -47,37 +48,39 @@ $(document).ready(function () {
 	let orderId = localStorage.getItem('orderId') || -1;
 	orderId = parseInt(orderId) || -1
 
-    fetch('/Orders/getOrderData?orderId=' + orderId).then(response => {
-        // 3. Handle the response
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        // Parse the response as JSON
-        return response.json();
-    })
-        .then(data => {
-            // Use the data here
-            console.log(data);
+    
 
-            // Now you can access the products using data.Products
-            if (data.products) {
-                var totalAmount = data.products.reduce(function (accumulator, product) {
-                    return accumulator + product.amount;
-                }, 0);
+        fetch('/Orders/getOrderData?orderId=' + orderId).then(response => {
+            // 3. Handle the response
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            // Parse the response as JSON
+            return response.json();
+        })
+            .then(data => {
+                // Use the data here
+                console.log(data);
 
-                // Update the HTML with the total amount
-                $('#product-count').text(totalAmount);
-                var products = data.products; // Replace 'data.Products' with your actual data source
+                // Now you can access the products using data.Products
+                if (data.products) {
+                    var totalAmount = data.products.reduce(function (accumulator, product) {
+                        return accumulator + product.amount;
+                    }, 0);
 
-                // Select the <ul> element where you want to append the product items
-                var productList = $('#product-list');
-                // Loop through each product and generate HTML for it
-                products.forEach(function (product) {
-                    // Create a new <li> element
-                    var listItem = $('<li>');
+                    // Update the HTML with the total amount
+                    $('#product-count').text(totalAmount);
+                    var products = data.products; // Replace 'data.Products' with your actual data source
 
-                    // Generate the HTML for the product item and append it to the <li> element
-                    listItem.html(`
+                    // Select the <ul> element where you want to append the product items
+                    var productList = $('#product-list');
+                    // Loop through each product and generate HTML for it
+                    products.forEach(function (product) {
+                        // Create a new <li> element
+                        var listItem = $('<li>');
+
+                        // Generate the HTML for the product item and append it to the <li> element
+                        listItem.html(`
             <div class="cart_section">
                 <div class="cart_img">
                     <a href="#"><img src="/images/shop/${product.imagePath}" alt=""></a>
@@ -90,15 +93,16 @@ $(document).ready(function () {
             </div>
         `);
 
-                    // Append the <li> element to the <ul> (productList)
-                    productList.append(listItem);
-                });
-            }
-           
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-        });
+                        // Append the <li> element to the <ul> (productList)
+                        productList.append(listItem);
+                    });
+                }
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    
 
        
 

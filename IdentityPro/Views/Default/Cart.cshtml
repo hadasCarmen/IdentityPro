@@ -102,7 +102,10 @@
                                                         }
                                                     </td>
                                                 </tr>
-                                                <tr class="order-total">
+                                                    <button id="view-paypal-link" class="ice_btn">Paypal</button>
+
+@*                                                    <a href="../Default/PayPal" id="view-paypal-link" class="ice_btn">Pay with PayPal</a>
+*@                                                <tr class="order-total">
                                                     <th>Total</th>
                                                     <td>
                                                         @if (Model.Products != null && Model.Products.Any())
@@ -122,6 +125,8 @@
                                         </table>
                                         <div class="wc-proceed-to-checkout">
                                             <button type="submit" class="checkout-button ice_btn alt wc-forward" name="update_cart" value="Update Cart">Update Cart</button>
+                                            <button id="view-paypal-link" class="ice_btn" style="display:none;">Paypal</button>
+
                                             @if (!Model.Products.Any()) // Replace with your logic to check if the cart is empty
                                             {
                                                 <button id="view-checkout-link" class="ice_btn" style="display:none;">proceed to checkout</button>
@@ -170,6 +175,28 @@
 
     // Attach click event handler to the "view checkout" link
     $(document).on('click', '#view-checkout-link', onViewCheckoutClick);
+
+    function onViewPayPalClick(event) {
+        // Prevent the default behavior (page reload) of the button click
+        event.preventDefault();
+
+        //// Retrieve the orderId from local storage
+        //var orderId = localStorage.getItem('orderId');
+        //console.log('123!#' + orderId);
+
+        //// Parse orderId as an integer (or default to -1 if it's not a valid integer)
+        //var myId = parseInt(orderId) || -1;
+
+        // Construct the URL based on myId
+        var url = '/Default/PayPal' 
+
+        // Redirect to the URL
+        window.location.href = url;
+    }
+
+    // Attach click event handler to the "view checkout" link
+    $(document).on('click', '#view-paypal-link', onViewPayPalClick);
+
 
 	function removeProduct(productId) {
 		var orderId = localStorage.getItem("orderId");
