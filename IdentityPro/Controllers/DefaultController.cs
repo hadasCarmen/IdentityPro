@@ -10,6 +10,13 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using IceCreamShopGateway.Services;
+using PayPal.Api;
+using System.IO;
+using PayPalHttp;
+using Newtonsoft.Json;
+using IceCreamShopGateway.Models;
+using Microsoft.CodeAnalysis;
+
 
 namespace IdentityPro.Controllers
 {
@@ -18,15 +25,22 @@ namespace IdentityPro.Controllers
         private readonly Ice_cream_shopContext _context;
         private readonly ApplicationDbContext _user_context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IConfiguration _configuration;
+        private readonly System.Net.Http.HttpClient _httpClient;
+
         //private readonly AddressService _addressService;
+        // private readonly WeatherService _weatherService;
 
 
-        public DefaultController(Ice_cream_shopContext context, ApplicationDbContext user_context, UserManager<IdentityUser> userManager)
+        public DefaultController(Ice_cream_shopContext context, ApplicationDbContext user_context, UserManager<IdentityUser> userManager, System.Net.Http.HttpClient httpClient/*, AddressService addressService, WeatherService weatherService*/)
         {
             _context = context;
             _user_context = user_context;
             _userManager = userManager;
-           // _addressService = addressService;
+            _httpClient = httpClient;
+            //_httpClient.BaseAddress = new Uri("http://localhost:5041");
+            //_addressService = addressService;
+            //_weatherService = weatherService;
 
         }
         // GET: DefaultController
@@ -39,6 +53,14 @@ namespace IdentityPro.Controllers
         {
             return View();
         }
+        public IActionResult PayPal()
+        {
+            // Your logic to prepare data for the PayPal view
+            return View("PayPal"); // Assuming "PayPal" is your view name
+        }
+
+
+
 
         // GET: DefaultController/Shop
         public async Task<IActionResult> Shop()
@@ -70,7 +92,7 @@ namespace IdentityPro.Controllers
         {
             try
             {
-                Order userOrder = CreateOrder(orderId);
+                Models.Order userOrder = CreateOrder(orderId);
                 // Pass the user's order as the model to the cart view
                 if (userOrder != null)
                 {
@@ -108,7 +130,7 @@ namespace IdentityPro.Controllers
             public int ZipCode { get; set; }
            
             [Required]
-            public Order MyOrder { get; set; }
+            public Models.Order MyOrder { get; set; }
 
         }
 
@@ -158,11 +180,96 @@ namespace IdentityPro.Controllers
         //        return false; // Assuming false is the default value in case of an exception
         //    }
         //}
+        public async Task<bool> CheckAddressExistence(string city, string street)
+        {
+            var apiUrl = $"http://localhost:5041/api/Address/checkAddress?city={city}&street={street}";
+
+            // Create an instance of HttpClient
+            using (var httpClient = new System.Net.Http.HttpClient())
+            {
+                // Send a GET request to the other project's endpoint
+                var response = await httpClient.GetAsync(apiUrl);
+                
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = response.Content.ReadAsStringAsync().Result;
+
+                    // Deserialize the response content manually
+                    var result = JsonConvert.DeserializeObject<bool?>(content);
+
+                    // Use the result directly in the if statement
+                    return result ?? false; // If result is null, default to false
+                }
+                else
+                {
+                    // Handle the error
+                    return false; // Return false or handle the error accordingly
+                }
+            }
+        }
+
+        public async Task<WeatherInfo> GeWeather(string location)
+        {
+            var apiUrl = $"http://localhost:5041/api/Weather/get?location={location}";
+
+            // Create an instance of HttpClient
+            using (var httpClient = new System.Net.Http.HttpClient())
+            {
+                // Send a GET request to the other project's endpoint
+                var response = await httpClient.GetAsync(apiUrl);
 
 
-        // POST: DefaultController/UpdateCheckout
-        [HttpPost]
-        public ActionResult UpdateCheckout(InputModel model, int orderId)
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = response.Content.ReadAsStringAsync().Result;
+
+                    // Deserialize the response content manually
+                    var result = JsonConvert.DeserializeObject<WeatherInfo>(content);
+
+                    // Use the result directly in the if statement
+                    return result; // If result is null, default to false
+                }
+                else
+                {
+                    // Handle the error
+                    return null; // Return false or handle the error accordingly
+                }
+            }
+        }
+
+        public async Task<bool> CheckIfHolidayWeek()
+        {
+            var apiUrl = $"http://localhost:5041/api/HebrewCal/get";
+
+            // Create an instance of HttpClient
+            using (var httpClient = new System.Net.Http.HttpClient())
+            {
+                // Send a GET request to the other project's endpoint
+                var response = await httpClient.GetAsync(apiUrl);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = response.Content.ReadAsStringAsync().Result;
+
+                    // Deserialize the response content manually
+                    var result = JsonConvert.DeserializeObject<bool>(content);
+
+                    // Use the result directly in the if statement
+                    return result; // If result is null, default to false
+                }
+                else
+                {
+                    // Handle the error
+                    return false; // Return false or handle the error accordingly
+                }
+            }
+        }
+
+            // POST: DefaultController/UpdateCheckout
+            [HttpPost]
+        public async Task<ActionResult> UpdateCheckout(InputModel model, int orderId)
         {
             int myId = orderId;
             string userName = User.Identity?.Name;
@@ -171,37 +278,57 @@ namespace IdentityPro.Controllers
 
             if (applicationUser != null)
             {
-                // Modify the user's fields based on the form data
-                applicationUser.City = model.City.ToString();
-                applicationUser.Street = model.Street.ToString();
-                applicationUser.Apartment = model.Apartment.ToString();
-                applicationUser.ZipCode = model.ZipCode;
-                user = applicationUser;
-                // Save changes to the database
-                var result = _userManager.UpdateAsync(user).Result;
-                _user_context.SaveChanges();
-
-                if (result.Succeeded)
+                //var content = CheckAddressExistence(model.City.ToString(), model.Street.ToString());
+                bool isValidAddresss = await CheckAddressExistence(model.City.ToString(), model.Street.ToString());
+                WeatherInfo weather = await GeWeather(model.City.ToString());
+                bool IsHolidayWeek = await CheckIfHolidayWeek();
+                // Deserialize the response content manually
+                if (isValidAddresss)
                 {
-                    try
+                    // Modify the user's fields based on the form data
+                    applicationUser.City = model.City.ToString();
+                    applicationUser.Street = model.Street.ToString();
+                    applicationUser.Apartment = model.Apartment.ToString();
+                    applicationUser.ZipCode = model.ZipCode;
+                    user = applicationUser;
+                    // Save changes to the database
+                    var result = _userManager.UpdateAsync(user).Result;
+                    _user_context.SaveChanges();
+
+                    if (result.Succeeded)
                     {
-                        model.MyOrder = CreateOrder(orderId);
+                        try
+                        {
+                            model.MyOrder = CreateOrder(orderId);
+                        }
+                        catch
+                        {
+                            ViewBag.ErrorMessage = "Please register first.";
+                        }
+                        model.MyOrder.CreatedDate = DateTime.Now;
+                        model.MyOrder.DeliveryDate = DateTime.Now.AddDays(14);
+
+                        model.MyOrder.Weather.Season = weather.Season;
+                        model.MyOrder.Weather.Temp = (int)weather.Temp;
+                        model.MyOrder.Weather.Humidity = weather.Humidity;
+                        model.MyOrder.IsHoliday = IsHolidayWeek;
+                        //var temp = (int)weather.Temp;
+                        _context.SaveChanges();
+                        // Continue with the checkout process or redirect to a success page
+                        return RedirectToAction("Index", "Home");
                     }
-                    catch
+                    else
                     {
-                        ViewBag.ErrorMessage = "Please register first.";
+                        ViewBag.ErrorMessage = "Address not found";
+                        return View("Error"); // Handle error scenario
                     }
-                    model.MyOrder.CreatedDate = DateTime.Now;
-                    model.MyOrder.DeliveryDate = DateTime.Now.AddDays(14);
-                    _context.SaveChanges();
-                    // Continue with the checkout process or redirect to a success page
-                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
                     ViewBag.ErrorMessage = "Failed to update user information.";
-                    return View("Error"); // Handle error scenario
+                    return View("Error");
                 }
+
             }
             else
             {
@@ -209,8 +336,6 @@ namespace IdentityPro.Controllers
                 return View("Error"); // Handle the case where the user is not found
             }
         }
-
-
 
         // Action method to retrieve product data by productId
         [HttpGet]
@@ -231,7 +356,7 @@ namespace IdentityPro.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateCart(int id, [Bind("Id,Products")] Order order)
+        public IActionResult UpdateCart(int id, [Bind("Id,Products")] Models.Order order)
         {
             if (order != null && order.Products != null)
             {
@@ -288,10 +413,14 @@ namespace IdentityPro.Controllers
             return RedirectToAction("Cart", new { orderId = orderId });
         }
 
-        public Order CreateOrder(int orderId)
+        public Models.Order CreateOrder(int orderId)
         {
             string userName = User.Identity?.Name;
-
+            var newWeather = new Models.Weather
+            {
+                Date = DateTime.Now, // Set the date
+                Season = "winter"
+            };
             if (userName == null)
             {
                 throw new ArgumentNullException(nameof(userName));
@@ -300,7 +429,7 @@ namespace IdentityPro.Controllers
             {
                 IdentityUser user = _userManager.FindByNameAsync(userName).Result;
                 ApplicationUser applicationUser = (ApplicationUser)user;
-                Order userOrder;
+                Models.Order userOrder;
 
                 if (orderId == -1)
                 {
@@ -313,19 +442,16 @@ namespace IdentityPro.Controllers
                     if (userOrder == null)
                     {
                         // If no active order exists, create a new one
-                        var newWeather = new Weather
-                        {
-                            Date = DateTime.Now, // Set the date
-                        };
 
                         // Associate the Weather entity with the Order
-                        userOrder = new Order
+                        userOrder = new Models.Order
                         {
                             CreatedDate = DateTime.Now,
                             DeliveryDate = null,       // Set the delivery date (if applicable)
                             Products = new List<OrderItem>(),
                             Weather = newWeather,
-                            User = applicationUser  // Associate the ApplicationUser with the Order
+                            User = applicationUser,  // Associate the ApplicationUser with the Order
+                            IsHoliday = false
                         };
 
                         _context.Order.Add(userOrder);
@@ -344,6 +470,7 @@ namespace IdentityPro.Controllers
                     if (userOrder != null)
                     {
                         userOrder.User = applicationUser;
+                        userOrder.Weather = newWeather;
                     }
                     // else: The order with orderId doesn't exist or is already delivered
                 }
@@ -352,7 +479,46 @@ namespace IdentityPro.Controllers
             }
         }
 
+        public IActionResult Index(decimal orderAmount)
+        {
+            // Your checkout logic to get the amount
 
+            // Initialize PayPal API context
+            var apiContext = new APIContext(new OAuthTokenCredential(
+                _configuration["PayPal:ClientId"],
+                _configuration["PayPal:ClientSecret"]
+            ).GetAccessToken());
+
+            // Create payment
+            var payment = new Payment
+            {
+                intent = "sale",
+                payer = new Payer { payment_method = "paypal" },
+                transactions = new List<Transaction>
+            {
+                new Transaction
+                {
+                    amount = new Amount
+                    {
+                        currency = "USD",
+                        total = orderAmount.ToString("F2")
+                    },
+                    description = "Your payment description"
+                }
+            },
+                redirect_urls = new RedirectUrls
+                {
+                    //return_url = "https://example.com/return",
+                    //cancel_url = "https://example.com/cancel"
+                }
+            };
+
+            var createdPayment = payment.Create(apiContext);
+
+            // Redirect user to PayPal for approval
+            var approvalUrl = createdPayment.links.FirstOrDefault(link => link.rel.Equals("approval_url"))?.href;
+            return Redirect(approvalUrl);
+        }
     }
 
 

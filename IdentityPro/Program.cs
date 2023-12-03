@@ -1,6 +1,8 @@
 using IdentityPro.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using IceCreamShopGateway.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Ice_cream_shopContext>(options =>
@@ -16,9 +18,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddHttpClient();/////////////
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -44,3 +47,22 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+using var scope = app.Services.CreateScope();
+var serviceProvider = scope.ServiceProvider;
+
+//var gatewayAddressService = serviceProvider.GetRequiredService<AddressService>();
+
+// Configure base URL for HttpClient using gateway address
+//var httpClient = new HttpClient();
+//var addressExists = await gatewayAddressService.CheckAddressExistence("ירושלים", "דגל ראובן");
+//if (addressExists == true)
+//{
+//    var uri = new Uri(gatewayAddressService.GetGatewayAddress());
+//    httpClient.BaseAddress = uri;
+//}
+
+// Resolve your HttpClient from the service provider
+//var httpClient = serviceProvider.GetRequiredService<HttpClient>();
+
+// Configure the HTTP request pipeline.

@@ -74,6 +74,8 @@ $(document).ready(function () {
 
                     // Select the <ul> element where you want to append the product items
                     var productList = $('#product-list');
+                    //productList.innerHTML = '';
+                    productList.empty();
                     // Loop through each product and generate HTML for it
                     products.forEach(function (product) {
                         // Create a new <li> element
@@ -83,7 +85,7 @@ $(document).ready(function () {
                         listItem.html(`
             <div class="cart_section">
                 <div class="cart_img">
-                    <a href="#"><img src="/images/shop/${product.imagePath}" alt=""></a>
+                    <a href="#"><img src="${product.imagePath}" alt=""></a>
                 </div>
                 <div class="cart_detail">
                     <h4><a href="cart.html">${product.name}</a></h4>

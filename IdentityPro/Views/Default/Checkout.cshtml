@@ -1,4 +1,8 @@
-﻿@model IdentityPro.Controllers.DefaultController.InputModel 
+﻿@model IdentityPro.Controllers.DefaultController.InputModel
+
+@*@model IdentityPro.Controllers.PaymentWithPayPal
+*@
+
 @{
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -88,7 +92,7 @@
 													var product = Model.MyOrder.Products[i];
 													<tr class="cart_item">
 															<td class="product-thumbnail">
-																<a href="#"><img src="/images/shop/@product.ImagePath" alt="@product.Name" class="img-responsive cart-item-image small-image-checkout"></a>
+																<a href="#"><img src="@product.ImagePath" alt="@product.Name" class="img-responsive cart-item-image small-image-checkout"></a>
 															</td>
 														<td class="product-name">
 															@product.Name&nbsp;
@@ -108,10 +112,6 @@
 											}
 										</tbody>
 											<tfoot>
-												<tr class="cart-subtotal">
-													<th>Subtotal</th>
-													<td><div><span class="amount">$120.00</span></div></td>
-												</tr>
 												<tr class="order-total">
 													<th>Total</th>
 													<td><div><strong><span class="amount">$120.00</span></strong></div> </td>
@@ -127,13 +127,13 @@
 														<label for="radio1">cash on delivery</label>
 													</div>
 												</li>
-												<li>
+												@*<li>
 													<div class="ice_radio_box">
 														<a href="/PaymentWithPayPal/Index?orderAmount=" + orderAmount class="btn btn-primary">Pay with PayPal</a>
-														@*<input type="radio" id="radio2" name="radio">
-														<label for="radio2">PayPal</label>*@
+														<input type="radio" id="radio2" name="radio">
+														<label for="radio2">PayPal</label>
 													</div>
-												</li>
+												</li> *@
 											</ul>
 
 											<div class="form-row place-order">

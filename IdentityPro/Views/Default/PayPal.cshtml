@@ -9,9 +9,10 @@
 <body>
     <script src="https://www.paypal.com/sdk/js?client-id=AVQtxsHXxTwurvaNsMWSzDyCl5dy2AfGjz_MJqG7Y9mWUdIl4ESF38LXo32bwRQ3JVysTqoacvUMLH8Z"></script>
     <div id="paypal-button-container" style="max-width: 1000px;"></div>
-    var orderAmount = parseFloat(document.getElementById('cartTotal').value);
 
     <script>
+        var orderAmount = parseFloat(document.getElementById('cartTotal').value);
+
         paypal.Buttons({
             style: {
                 disableMaxWidth: true
@@ -32,7 +33,7 @@
                 // Capture the funds from the transaction
                 return actions.order.capture().then(function (details) {
                     // Call your server to save the transaction
-                    return fetch('/your-server-side-code', { /************/
+                    return fetch('/Orders/Pay', { /************/
                         method: 'post',
                         headers: {
                             'content-type': 'application/json'
@@ -64,7 +65,7 @@
     <form action="/Orders/Pay" method="post">
         <!-- השדות של הטופס -->
 
-        <button type="submit" id="submit-button" style="display: none;">שליחת הטופס</button>
+        <button type="submit" id="submit-button" style="display: none;">Submit form</button>
     </form>
 
     <script>

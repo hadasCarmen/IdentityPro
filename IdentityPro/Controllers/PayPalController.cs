@@ -1,4 +1,69 @@
-﻿//using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using PayPalCheckoutSdk.Core;
+using PayPalCheckoutSdk.Orders;
+using System;
+using PayPal.Api;
+using System.Collections.Generic;
+using System.Configuration;
+using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
+using PayPal.OpenIdConnect;
+using Microsoft.Extensions.Configuration;
+using PayPalHttp;
+//using Payer = PayPal.Api.Payer;
+
+namespace IdentityPro.Controllers
+{
+    public partial class PaymentWithPayPal : Controller
+    {
+        // private readonly IConfiguration _configuration;
+        //private readonly PayPalEnvironment environment;
+        public string PayPalClientId { get; set; } = "";
+        public string PayPalSecret { get; set; } = "";
+        public string PayPalUrl { get; set; } = "";
+        public string total { get; set; } = "";
+
+
+
+        public PaymentWithPayPal(IConfiguration configuration)
+        {
+            PayPalClientId = configuration["PayPal:ClientId"];
+            PayPalSecret = configuration["PayPal:ClientSecret"];
+            PayPalUrl = configuration["PayPal:Url"];
+        }
+        public void OnGet()
+        {
+            total = TempData["Total"]?.ToString() ?? "";
+
+            TempData.Keep();
+
+            if (total == "")
+            {
+                Response.Redirect("/"); //Redirect to home page
+                return;
+            }
+        }
+        [Route("api/[controller]")]
+        [ApiController]
+        public class OrdersController : ControllerBase
+        {
+            //[HttpPost("Pay")]
+            //public IActionResult Pay([FromBody] PayPayload payload)
+            //{
+            //    // Place your logic here to handle the payment capture and save the transaction details
+            //    // For demonstration purposes, I'll just return a success response
+            //    return Ok();
+            //}
+        }
+    }
+}
+
+
+
+
+
+
+
+//using Microsoft.AspNetCore.Mvc;
 //using PayPalCheckoutSdk.Core;
 //using PayPalCheckoutSdk.Orders;
 //using System;

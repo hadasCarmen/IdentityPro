@@ -186,6 +186,7 @@ namespace IdentityPro.Controllers
                     var newWeather = new Weather
                     {
                         Date = DateTime.Now, // Set the date
+                        Season = "winter"
 
                     };
 

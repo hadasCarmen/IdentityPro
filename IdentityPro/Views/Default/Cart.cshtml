@@ -28,7 +28,6 @@
                                     <th class="product-wrap">Product</th>
                                     <th class="product-price">Price</th>
                                     <th class="product-quantity">Quantity</th>
-                                    <th class="product-subtotal">Total</th>
                                     <th class="product-remove">Remove</th>
                                 </tr>
                             </thead>
@@ -43,7 +42,7 @@
 										<tr class="cart-item">
 											<td class="product-wrap">
 												<div class="product-thumbnail">
-													<a href="#"><img src="/images/shop/@product.ImagePath" alt="@product.Name" class="img-responsive cart-item-image"></a>
+													<a href="#"><img src="@product.ImagePath" alt="@product.Name" class="img-responsive cart-item-image"></a>
 												</div>
 												<div class="product-detail">
 													<h4 class="product-name"><a href="#"><i class="flaticon-check"></i> @product.Name</a></h4>
@@ -54,9 +53,6 @@
 											</td>
 											<td class="product-quantity">
 												<input type="number" step="1" min="0" name="Products[@Model.Products.IndexOf(product)].Amount" value="@product.Amount" title="qty" class="input-text qty text" size="4" />
-											</td>
-											<td class="product-subtotal">
-												<span class="amount">$@(product.Price * product.Amount)</span>
 											</td>
 											<td class="product-remove">
 												<button type="button" class="remove_button" title="Remove this item" onclick="removeProduct('@product.Id')">
@@ -88,21 +84,10 @@
                                         <h2>Cart Totals</h2>
                                         <table>
                                             <tbody>
-                                                <tr class="cart-subtotal">
-                                                    <th>Subtotal</th>
-                                                    <td>
-                                                        @if (Model.Products != null && Model.Products.Any())
-                                                        {
-                                                            var subtotal = Model.Products.Sum(product => product.Price * product.Amount);
-                                                            <span class="amount">$@subtotal</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="amount">$0.00</span>
-                                                        }
-                                                    </td>
-                                                </tr>
+                                                <div id="paypal-button-container">
                                                     <button id="view-paypal-link" class="ice_btn">Paypal</button>
+
+                                                </div>
 
 @*                                                    <a href="../Default/PayPal" id="view-paypal-link" class="ice_btn">Pay with PayPal</a>
 *@                                                <tr class="order-total">
@@ -113,6 +98,9 @@
                                                             var total = Model.Products.Sum(product => product.Price * product.Amount);
                                                             <strong><span class="amount">$@total</span></strong>
                                                             <input type="hidden" id="cartTotal" value="@Model.Products.Sum(product => product.Price * product.Amount)" />
+                                                            
+                                                            TempData["Total"] = "" + total;
+
 
                                                         }
                                                         else

@@ -4,6 +4,7 @@ using IdentityPro.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ice_cream_shop.Migrations
 {
     [DbContext(typeof(Ice_cream_shopContext))]
-    partial class Ice_cream_shopContextModelSnapshot : ModelSnapshot
+    [Migration("20231202232211_UpdateWeatherInfo")]
+    partial class UpdateWeatherInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,9 +112,6 @@ namespace Ice_cream_shop.Migrations
 
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsHoliday")
-                        .HasColumnType("bit");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");

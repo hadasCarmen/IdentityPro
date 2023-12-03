@@ -12,12 +12,7 @@ namespace IdentityPro.Models
 		public DateTime? DeliveryDate { get; set; }
 		public  Weather Weather { get; set; }
 		public ApplicationUser User { get; set; }
+		public bool IsHoliday { get; set; }
     }
- //   public class Weather
-	//{
-	//	public string Season { get; set; }
-	//	public int Temperature { get; set; }
-	//	public int Humidity { get; set; }
-	//}
-
+ 
 }
