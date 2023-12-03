@@ -231,11 +231,13 @@ namespace IdentityPro.Controllers
                             OrderId = userOrder.Id,
                             Price = productToAdd.Price,
                             Amount = 1,
-                            ImagePath = productToAdd.ImagePath
+                            ImagePath = productToAdd.ImagePath,
                         };
                         // Add the product to the order
                         userOrder.Products.Add(orderItem);
                         _context.OrderItem.Add(orderItem);
+                        userOrder.Day = DateTime.Now.ToString("dddd");
+
                     }
                     else
                     {
