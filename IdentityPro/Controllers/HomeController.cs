@@ -24,9 +24,15 @@ namespace IdentityPro.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        //public IActionResult Error(string errorMessage = null)
+        //{
+        //    //string errorMessage = TempData["ErrorMessage"] as string;
+        //    return View(new ErrorViewModel { ErrorMessage = errorMessage });
+        //    //return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //}
+        public IActionResult Error(ErrorViewModel model)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(model);
         }
     }
 }

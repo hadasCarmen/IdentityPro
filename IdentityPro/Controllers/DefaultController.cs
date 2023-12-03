@@ -16,7 +16,8 @@ using PayPalHttp;
 using Newtonsoft.Json;
 using IceCreamShopGateway.Models;
 using Microsoft.CodeAnalysis;
-
+using static PayPal.BaseConstants;
+using System.Security.Cryptography.X509Certificates;
 
 namespace IdentityPro.Controllers
 {
@@ -46,7 +47,24 @@ namespace IdentityPro.Controllers
         // GET: DefaultController
         public ActionResult Home()
         {
-            return View();
+            var topProducts = new List<OrderItem>();
+            var amount = _context.OrderItem.Count();
+            if (amount > 0)
+            {
+                 topProducts = _context.OrderItem
+                        .GroupBy(oi => oi.Name)
+                        .Select(group => new OrderItem
+                        {
+                            Name = group.Key,
+                            Amount = group.Sum(oi => oi.Amount),
+                            Price = group.First().Price,
+                            ImagePath = group.First().ImagePath
+                        })
+                        .OrderByDescending(oi => oi.Amount)
+                        .Take(3)
+                        .ToList();
+            }
+            return View(topProducts);
         }
         // GET: DefaultController/About
         public ActionResult About()
@@ -101,13 +119,14 @@ namespace IdentityPro.Controllers
                 else
                 {
                     // Return an error message or handle the case when the order is not found
-                    return Problem($"Order with ID {orderId} not found.");
+                    string errorMessage = "Error accured please try again ";
+                    return RedirectToAction("Error", "Home", new { errorMessage });
                 }
             }
             catch
             {
-                ViewBag.ErrorMessage = "Please register first.";
-                return RedirectToAction("Error", "Home");
+                string errorMessage = "Please register first.";
+                return RedirectToAction("Error", "Home", new { errorMessage });
             }
         }
 
@@ -142,9 +161,8 @@ namespace IdentityPro.Controllers
             Input = new InputModel();
             if (userName == null)
             {
-                ViewBag.ErrorMessage = "Please register first.";
-                return RedirectToAction("Error", "Home");
-
+                string errorMessage = "Please register first.";
+                return RedirectToAction("Error", "Home", new { errorMessage });
             }
             // Initialize InputModel with a new instance
             try
@@ -153,33 +171,20 @@ namespace IdentityPro.Controllers
                 }
                 catch
                 {
-                    ViewBag.ErrorMessage = "Please register first.";
-                    return Redirect("https://localhost:7284/Identity/Account/Register");
-                }
+                string errorMessage = "Error accured please try again ";
+                return RedirectToAction("Error", "Home", new { errorMessage });
+            }
 
                 if (Input.MyOrder == null && orderId != -1)
                 {
-                    // Return an error message or handle the case when the order is not found
-                    return Problem($"Order with ID {orderId} not found.");
-                }
+                // Return an error message or handle the case when the order is not found
+                string errorMessage = "Error accured please try again ";
+                return RedirectToAction("Error", "Home", new { errorMessage });
+            }
                         return View(Input);
         }
 
-        //public bool AddressCheck(string city, string street)
-        //{
-        //    try
-        //    {
-        //        // Call the AddressService from the gateway project synchronously
-        //        bool? result = _addressService.CheckAddressExistence(city, street).Result;
-
-        //        // If the result is not null, return its value; otherwise, return false
-        //        return result ?? false;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return false; // Assuming false is the default value in case of an exception
-        //    }
-        //}
+        
         public async Task<bool> CheckAddressExistence(string city, string street)
         {
             var apiUrl = $"http://localhost:5041/api/Address/checkAddress?city={city}&street={street}";
@@ -248,11 +253,9 @@ namespace IdentityPro.Controllers
                 // Send a GET request to the other project's endpoint
                 var response = await httpClient.GetAsync(apiUrl);
 
-
                 if (response.IsSuccessStatusCode)
                 {
                     var content = response.Content.ReadAsStringAsync().Result;
-
                     // Deserialize the response content manually
                     var result = JsonConvert.DeserializeObject<bool>(content);
 
@@ -280,11 +283,11 @@ namespace IdentityPro.Controllers
             {
                 //var content = CheckAddressExistence(model.City.ToString(), model.Street.ToString());
                 bool isValidAddresss = await CheckAddressExistence(model.City.ToString(), model.Street.ToString());
-                WeatherInfo weather = await GeWeather(model.City.ToString());
                 bool IsHolidayWeek = await CheckIfHolidayWeek();
                 // Deserialize the response content manually
                 if (isValidAddresss)
                 {
+                    WeatherInfo weather = await GeWeather(model.City.ToString());
                     // Modify the user's fields based on the form data
                     applicationUser.City = model.City.ToString();
                     applicationUser.Street = model.Street.ToString();
@@ -303,7 +306,8 @@ namespace IdentityPro.Controllers
                         }
                         catch
                         {
-                            ViewBag.ErrorMessage = "Please register first.";
+                            string errorMessage = "Please register first.";
+                            return RedirectToAction("Error", "Home", new { errorMessage });
                         }
                         model.MyOrder.CreatedDate = DateTime.Now;
                         model.MyOrder.DeliveryDate = DateTime.Now.AddDays(14);
@@ -312,6 +316,8 @@ namespace IdentityPro.Controllers
                         model.MyOrder.Weather.Temp = (int)weather.Temp;
                         model.MyOrder.Weather.Humidity = weather.Humidity;
                         model.MyOrder.IsHoliday = IsHolidayWeek;
+                        model.MyOrder.Day = DateTime.Now.ToString("dddd");
+
                         //var temp = (int)weather.Temp;
                         _context.SaveChanges();
                         // Continue with the checkout process or redirect to a success page
@@ -319,21 +325,21 @@ namespace IdentityPro.Controllers
                     }
                     else
                     {
-                        ViewBag.ErrorMessage = "Address not found";
-                        return View("Error"); // Handle error scenario
+                        string errorMessage = "Error accured please try again ";
+                        return RedirectToAction("Error", "Home", new { errorMessage });
                     }
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Failed to update user information.";
-                    return View("Error");
+                    string errorMessage = "Address not found";
+                    return RedirectToAction("Error", "Home", new { errorMessage });
                 }
 
             }
             else
             {
-                ViewBag.ErrorMessage = "User not found.";
-                return View("Error"); // Handle the case where the user is not found
+                string errorMessage = "Please register first.";
+                return RedirectToAction("Error", "Home", new { errorMessage });// Handle the case where the user is not found
             }
         }
 

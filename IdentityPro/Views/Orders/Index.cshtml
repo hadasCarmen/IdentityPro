@@ -6,6 +6,17 @@
 
 <h2>Index</h2>
 
+<form asp-action="Index" method="get">
+    <label for="startDate">Start Date:</label>
+    <input type="date" name="startDate" required>
+
+    <label for="endDate">End Date:</label>
+    <input type="date" name="endDate" required>
+
+    <button type="submit">Filter</button>
+</form>
+
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>

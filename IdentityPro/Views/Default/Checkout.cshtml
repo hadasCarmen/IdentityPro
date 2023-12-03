@@ -114,7 +114,18 @@
 											<tfoot>
 												<tr class="order-total">
 													<th>Total</th>
-													<td><div><strong><span class="amount">$120.00</span></strong></div> </td>
+
+													<td>
+														@if (Model.MyOrder.Products != null && Model.MyOrder.Products.Any())
+														{
+															var total = Model.MyOrder.Products.Sum(product => product.Price * product.Amount);
+															<strong><span class="amount">$@total</span></strong>
+														}
+														else
+														{
+															<strong><span class="amount">$0.00</span></strong>
+														}
+													</td>
 												</tr>
 											</tfoot>
 										</table>

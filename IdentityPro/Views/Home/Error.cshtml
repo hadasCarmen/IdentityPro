@@ -3,13 +3,69 @@
     ViewData["Title"] = "Error";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@if ((Model.ErrorMessage) == "Please register first.")
+{
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="alert alert-danger">
+            <strong>Warning!</strong> @Model.ErrorMessage
+        </div>
+    </div>
+      <div class="wc-proceed-to-checkout">
 
-<h2>REGISTER FIRST</h2>
-@* <div class="cart_section">
-*@    <div class="wc-proceed-to-checkout">
-            <a class="ice_btn" asp-area="Identity" asp-page="/Account/Register">signUp</a>
-    
-            <a class="ice_btn" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="ice_btn btn4" asp-area="Identity" asp-page="/Account/Register">signUp</a>
+
+        <a class="ice_btn btn4" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </div>
+}
+@if ((Model.ErrorMessage) == "Address not found")
+{
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="alert alert-danger">
+            <strong>Warning!</strong> @Model.ErrorMessage
+        </div>
+    </div>
+    <div class="wc-proceed-to-checkout">
+
+        <button id="view-checkout-link" class="ice_btn btn4">try again</button>
+
+    </div>
+}
+@if ((Model.ErrorMessage) == "Url is not valid/does not contain ice cream")
+{
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="alert alert-danger">
+            <strong>Warning!</strong> @Model.ErrorMessage
+        </div>
+    </div>
+    <div class="wc-proceed-to-checkout">
+        <a class="ice_btn btn4" asp-controller="Products" asp-action="Create">try again</a>
+
+     @*   <p>
+            <a asp-action="Create">try again</a>
+        </p>*@
+
+    </div>
+}
+@if ((Model.ErrorMessage) == "Url isn't valid/does not contain ice cream")
+{
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="alert alert-danger">
+            <strong>Warning!</strong> @Model.ErrorMessage
+        </div>
+    </div>
+    <div class="wc-proceed-to-checkout">
+        <a class="ice_btn btn4" asp-controller="Products" asp-action="Index">try again</a>
+@*        <a asp-action="Index">Back to List</a>
+*@
+    </div>
+}
+    @if ((Model.ErrorMessage) == "Error accured please try again ")
+{
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="alert alert-danger">
+            <strong>Warning!</strong> @Model.ErrorMessage
+        </div>
     </div>
 
+}
 

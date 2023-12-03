@@ -6,20 +6,20 @@
 @if (SignInManager.IsSignedIn(User))
 {
         <li class="cart_section">
-            <a class="ice_btn" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+            <a class="ice_btn btn3" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
     </li>
         <li class="cart_section">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Home", "Default", new { area = "" })">
-                <button type="submit" class="ice_btn">Logout</button>
+                <button type="submit" class="ice_btn btn3">Logout</button>
         </form>
     </li>
 }
 else
 {
         <li class="cart_section">
-            <a class="ice_btn" asp-area="Identity" asp-page="/Account/Register">signUp</a>
-    
-            <a class="ice_btn" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="ice_btn btn3" asp-area="Identity" asp-page="/Account/Register">signUp</a>
+
+            <a class="ice_btn btn3" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
 </ul>

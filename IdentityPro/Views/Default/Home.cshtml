@@ -1,4 +1,4 @@
-﻿
+﻿@model List<OrderItem>
 @{
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/Home_Layout.cshtml";
@@ -82,48 +82,22 @@
 				</div>
 			</div>
 			<div class="ice_special">
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<div class="special_section text-center wow slideright">
-						<div class="special_img">
-							<img src="/images/shop/shop_5.jpg" alt="" class="img-responsive">
+				@foreach (var product in Model)
+				{
+					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+						<div class="special_section text-center wow slideright">
+							<div class="special_img">
+								<img src="@product.ImagePath" alt="@product.Name" class="img-responsive">
+							</div>
+							<h2 class="ice_sub_heading"><a href="shop_single.html"><i class="flaticon-check"></i> @product.Name</a></h2>
+							<div class="wishlist_wrapper">
+								<span class="pull-left">$@product.Price</span>
+								<a href="" class="pull-right"><i class="flaticon-like"></i> add to wishlist</a>
+							</div>
+							<a href="shop_single.html" class="ice_btn">add to cart</a>
 						</div>
-						<h2 class="ice_sub_heading"><a href="shop_single.html"><i class="flaticon-check"></i> Green tea ice cream</a></h2>
-						<p>It is a paradisematic country, in which roasted parts of sentences fly into your mouth.Pityful a rethoric question.</p>
-						<div class="wishlist_wrapper">
-							<span class="pull-left">$70.00</span>
-							<a href="" class="pull-right"><i class="flaticon-like"></i> add to wishlist</a>
-						</div>
-						<a href="shop_single.html" class="ice_btn">add to cart</a>
 					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<div class="special_section text-center">
-						<div class="special_img">
-							<img src="/images/shop/shope_3.jpg" alt="" class="img-responsive">
-						</div>
-						<h2 class="ice_sub_heading"><a href="shop_single.html"><i class="flaticon-check"></i> Butter Brickle</a></h2>
-						<p>It is a paradisematic country, in which roasted parts of sentences fly into your mouth.Pityful a rethoric question.</p>
-						<div class="wishlist_wrapper">
-							<span class="pull-left">$70.00</span>
-							<a href="" class="pull-right"><i class="flaticon-like"></i> add to wishlist</a>
-						</div>
-						<a href="shop_single.html" class="ice_btn">add to cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col-lg-offset-0 col-md-offset-0 col-sm-offset-3 col-sx-offset-0">
-					<div class="special_section text-center wow slideleft">
-						<div class="special_img">
-							<img src="/images/shop/shope_4.jpg" alt="" class="img-responsive">
-						</div>
-						<h2 class="ice_sub_heading"><a href="shop_single.html"><i class="flaticon-check"></i> Chocolate chip cookie</a></h2>
-						<p>It is a paradisematic country, in which roasted parts of sentences fly into your mouth.Pityful a rethoric question.</p>
-						<div class="wishlist_wrapper">
-							<span class="pull-left">$70.00</span>
-							<a href="" class="pull-right"><i class="flaticon-like"></i> add to wishlist</a>
-						</div>
-						<a href="shop_single.html" class="ice_btn">add to cart</a>
-					</div>
-				</div>
+				}
 			</div>
 		</div>
 	</div>

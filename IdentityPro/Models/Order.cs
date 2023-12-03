@@ -12,6 +12,7 @@ namespace IdentityPro.Models
 		public DateTime? DeliveryDate { get; set; }
 		public  Weather Weather { get; set; }
 		public ApplicationUser User { get; set; }
+		public string Day { get; set; }
 		public bool IsHoliday { get; set; }
     }
  

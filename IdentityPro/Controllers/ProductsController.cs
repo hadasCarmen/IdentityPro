@@ -103,8 +103,8 @@ namespace IdentityPro.Controllers
             }
             else
             {
-                ViewBag.ErrorMessage = "Doesnt contain ice cream";
-                return View("Error"); // Handle error scenario
+                string errorMessage = "Url is not valid/does not contain ice cream";
+                return RedirectToAction("Error", "Home", new { errorMessage });
             }
 
         }
@@ -167,8 +167,8 @@ namespace IdentityPro.Controllers
             else
             
             {
-                ViewBag.ErrorMessage = "Doesnt contain ice cream";
-                return View("Error"); // Handle error scenario
+                string errorMessage = "Url isn't valid/does not contain ice cream";
+                return RedirectToAction("Error", "Home", new { errorMessage });
             }
         }
 

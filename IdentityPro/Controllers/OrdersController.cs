@@ -20,15 +20,32 @@ namespace IdentityPro.Controllers
         {
             _context = context;
         }
-
         // GET: Orders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime? startDate=null, DateTime? endDate=null)
         {
-            return _context.Order != null ?
-                        View(await _context.Order.Include(o => o.Products).Include(o=>o.User).
-                        ToListAsync()) :
-                        Problem("Entity set 'Ice_cream_shopContext.Order'  is null.");
+            if (_context.Order == null)
+            {
+                return Problem("Entity set 'Ice_cream_shopContext.Order' is null.");
+            }
+            startDate ??= DateTime.MinValue;
+            endDate ??= DateTime.MaxValue;
+
+            var filteredOrders = await _context.Order
+                .Include(o => o.Products)
+                .Include(o => o.User)
+                .Where(o => o.CreatedDate >= startDate && o.CreatedDate <= endDate && o.DeliveryDate != null )
+                .OrderByDescending(o => o.CreatedDate)
+                .ToListAsync();
+
+            return View(filteredOrders);
         }
+        //public async Task<IActionResult> Index()
+        //{
+        //    return _context.Order != null ?
+        //                View(await _context.Order.Include(o => o.Products).Include(o=>o.User).
+        //                ToListAsync()) :
+        //                Problem("Entity set 'Ice_cream_shopContext.Order'  is null.");
+        //}
 
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)

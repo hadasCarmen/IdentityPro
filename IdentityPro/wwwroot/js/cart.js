@@ -50,61 +50,52 @@ $(document).ready(function () {
 
     
 
-        fetch('/Orders/getOrderData?orderId=' + orderId).then(response => {
-            // 3. Handle the response
+    fetch('/Orders/getOrderData?orderId=' + orderId)
+        .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            // Parse the response as JSON
             return response.json();
         })
-            .then(data => {
-                // Use the data here
-                console.log(data);
+        .then(data => {
+            console.log(data);
 
-                // Now you can access the products using data.Products
-                if (data.products) {
-                    var totalAmount = data.products.reduce(function (accumulator, product) {
-                        return accumulator + product.amount;
-                    }, 0);
+            if (data.products) {
+                var totalAmount = data.products.reduce(function (accumulator, product) {
+                    return accumulator + product.amount;
+                }, 0);
 
-                    // Update the HTML with the total amount
-                    $('#product-count').text(totalAmount);
-                    var products = data.products; // Replace 'data.Products' with your actual data source
+                // Update the HTML with the total amount
+                $('#product-count').text(totalAmount);
 
-                    // Select the <ul> element where you want to append the product items
-                    var productList = $('#product-list');
-                    //productList.innerHTML = '';
-                    productList.empty();
-                    // Loop through each product and generate HTML for it
-                    products.forEach(function (product) {
-                        // Create a new <li> element
-                        var listItem = $('<li>');
+                // Select the <ul> element where you want to append the product items
+                var productList = $('#product-list');
+                productList.empty();
 
-                        // Generate the HTML for the product item and append it to the <li> element
-                        listItem.html(`
-            <div class="cart_section">
-                <div class="cart_img">
-                    <a href="#"><img src="${product.imagePath}" alt=""></a>
-                </div>
-                <div class="cart_detail">
-                    <h4><a href="cart.html">${product.name}</a></h4>
-                    <h5>$ ${product.price}</h5>
-                </div>
-                <a class="cart_delete"></a>
-            </div>
-        `);
+                // Loop through each product and generate HTML for it
+                data.products.forEach(function (product) {
+                    var listItem = $('<li>');
 
-                        // Append the <li> element to the <ul> (productList)
-                        productList.append(listItem);
-                    });
-                }
+                    listItem.html(`
+                    <div class="cart_section">
+                        <div class="cart_img">
+                            <a href="#"><img src="${product.imagePath}" alt=""></a>
+                        </div>
+                        <div class="cart_detail">
+                            <h4><a href="cart.html">${product.name}</a></h4>
+                            <h5>$ ${product.price}</h5>
+                        </div>
+                        <a class="cart_delete"></a>
+                    </div>
+                `);
 
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-            });
-    
+                    productList.append(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
 
        
 
