@@ -32,7 +32,6 @@ namespace IdentityPro.Controllers
 
             var filteredOrders = await _context.Order
                 .Include(o => o.Products)
-                .Include(o => o.User)
                 .Where(o => o.CreatedDate >= startDate && o.CreatedDate <= endDate && o.DeliveryDate != null )
                 .OrderByDescending(o => o.CreatedDate)
                 .ToListAsync();
@@ -283,6 +282,52 @@ namespace IdentityPro.Controllers
             }
 
             return NotFound();
+        }
+
+        public IActionResult GraphCreate()
+        {
+            var viewModel = new OrderGraphViewModel();
+            // Initialize or populate viewModel as needed
+            return View("Graph", viewModel); // Specify the correct view name
+        }
+
+
+        public IActionResult Graph(DateTime? start, DateTime? end)
+        {
+            var orders = _context.Order
+                .Include(order => order.Products) // Include products
+                .Where(order =>
+                    order.CreatedDate >= start &&
+                    order.CreatedDate <= end &&
+                    order.DeliveryDate.HasValue) // Filter orders with non-null DeliveryDate
+                .ToList();
+
+            // Prepare data for the view model
+            var dateLabels = orders
+                .Where(order => order.CreatedDate.HasValue)
+                .Select(order => order.CreatedDate.Value.ToShortDateString())
+                .Distinct()
+                .ToList();
+
+            var viewModel = new OrderGraphViewModel
+            {
+                DateLabels = dateLabels,
+                TotalPrices = dateLabels
+                    .Select(dateLabel =>
+                        orders
+                            .Where(order => order.CreatedDate.HasValue && order.CreatedDate.Value.ToShortDateString() == dateLabel)
+                            .Sum(order => order.Products.Sum(product => product.Price * product.Amount))
+                    )
+                    .ToList(),
+                OrderCounts = dateLabels
+                    .Select(dateLabel =>
+                        orders
+                            .Count(order => order.CreatedDate.HasValue && order.CreatedDate.Value.ToShortDateString() == dateLabel)
+                    )
+                    .ToList()
+            };
+
+            return View(viewModel); // Pass the view model to the view
         }
 
 

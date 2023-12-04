@@ -66,6 +66,61 @@
             <strong>Warning!</strong> @Model.ErrorMessage
         </div>
     </div>
-
+}   
+    @if ((Model.ErrorMessage) == "One or more of the details are missing")
+{
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="alert alert-danger">
+                <strong>Warning!</strong> @Model.ErrorMessage
+            </div>
+        <button id="view-checkout-link" class=" ice_btn btn4">try again</button>
+    </div>
 }
+
+<script>
+
+    // Function to handle click on "view checkout" link
+    function onViewCheckoutClick(event) {
+        // Prevent the default behavior (page reload) of the button click
+        event.preventDefault();
+
+        // Retrieve the orderId from local storage
+        var orderId = localStorage.getItem('orderId');
+        console.log('123!#' + orderId);
+
+        // Parse orderId as an integer (or default to -1 if it's not a valid integer)
+        var myId = parseInt(orderId) || -1;
+
+        // Construct the URL based on myId
+        var url = '/Default/Checkout?orderId=' + myId; // Correct the controller name here
+
+        // Redirect to the URL
+        window.location.href = url;
+    }
+
+    // Attach click event handler to the "view checkout" link
+    $(document).on('click', '#view-checkout-link', onViewCheckoutClick);
+
+    function removeProduct(productId) {
+        var orderId = localStorage.getItem("orderId");
+
+        // Send an AJAX POST request to your server endpoint (e.g., RemoveProduct)
+        $.ajax({
+            type: "POST",
+            url: "/Default/RemoveProduct", // Replace with the actual URL
+            data: {
+                orderId: orderId,
+                productId: productId
+            },
+            success: function () {
+                // Reload the page after the AJAX request is successful
+                document.location.reload();
+            },
+            error: function () {
+                // Handle errors if necessary.
+            }
+        });
+    }
+</script>
+
 

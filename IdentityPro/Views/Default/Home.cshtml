@@ -1,4 +1,4 @@
-﻿@model List<OrderItem>
+﻿@model List<Product>
 @{
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/Home_Layout.cshtml";
@@ -89,13 +89,12 @@
 							<div class="special_img">
 								<img src="@product.ImagePath" alt="@product.Name" class="img-responsive">
 							</div>
-							<h2 class="ice_sub_heading"><a href="shop_single.html"><i class="flaticon-check"></i> @product.Name</a></h2>
-							<div class="wishlist_wrapper">
-								<span class="pull-left">$@product.Price</span>
-								<a href="" class="pull-right"><i class="flaticon-like"></i> add to wishlist</a>
-							</div>
-							<a href="shop_single.html" class="ice_btn">add to cart</a>
+							<h2 class="ice_sub_heading"><i class="flaticon-check"></i> @product.Name</h2>
+							<button class="ice_btn add-to-order-button" data-product-id="@product.Id">Add to Cart</button>
 						</div>
+					</div>
+					<div id="success-message" class="success-message hidden">
+						Product added to the cart! 🍓
 					</div>
 				}
 			</div>
@@ -145,88 +144,6 @@
 	</div>
 </div>
 
-<div class="ice_main_section2 ice_team_wrapper">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg- col-md-6 col-sm-12 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-0 col-sx-offset-0">
-				<div class="heading_wrapper text-center wow slidedown">
-					<h1 class="ice_heading_white">our team</h1>
-					<p class="white">It is a paradisematic country, in which roasted parts of sentences fly into your mouth.Pityful a rethoric question.</p>
-				</div>
-			</div>
-			<div class="team_wrapper">
-				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-					<div class="team_section text-center wow zoomIn">
-						<div class="team_img">
-							<img src="http://via.placeholder.com/272x307" alt="" class="img-responsive team_member">
-							<img src="images/team/shape.png" alt="" class="img-responsive shape_img">
-						</div>
-						<h2 class="ice_sub_heading white"><a href="team_single.html">Jonthana Thomas</a></h2>
-						<p class="white">CEO</p>
-						<ul class="social_icon">
-							<li><a href="#"><i class="flaticon-facebook-letter-logo"></i></a></li>
-							<li><a href="#"><i class="flaticon-twitter-logo-silhouette"></i></a></li>
-							<li><a href="#"><i class="flaticon-linkedin-logo"></i></a></li>
-							<li><a href="#"><i class="flaticon-google-plus-logo"></i></a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-					<div class="team_section text-center wow zoomIn" data-wow-delay="0.2s">
-						<div class="team_img">
-							<img src="http://via.placeholder.com/272x307" alt="" class="img-responsive team_member">
-							<img src="images/team/shape.png" alt="" class="img-responsive shape_img">
-						</div>
-						<h2 class="ice_sub_heading white"><a href="team_single.html">Bernadette	Greene</a></h2>
-						<p class="white">Taste Bud</p>
-						<ul class="social_icon">
-							<li><a href="#"><i class="flaticon-facebook-letter-logo"></i></a></li>
-							<li><a href="#"><i class="flaticon-twitter-logo-silhouette"></i></a></li>
-							<li><a href="#"><i class="flaticon-linkedin-logo"></i></a></li>
-							<li><a href="#"><i class="flaticon-google-plus-logo"></i></a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-					<div class="team_section text-center wow zoomIn" data-wow-delay="0.4s">
-						<div class="team_img">
-							<img src="http://via.placeholder.com/272x307" alt="" class="img-responsive team_member">
-							<img src="images/team/shape.png" alt="" class="img-responsive shape_img">
-						</div>
-						<h2 class="ice_sub_heading white"><a href="team_single.html">John Thomas</a></h2>
-						<p class="white">Marketing</p>
-						<ul class="social_icon">
-							<li><a href="#"><i class="flaticon-facebook-letter-logo"></i></a></li>
-							<li><a href="#"><i class="flaticon-twitter-logo-silhouette"></i></a></li>
-							<li><a href="#"><i class="flaticon-linkedin-logo"></i></a></li>
-							<li><a href="#"><i class="flaticon-google-plus-logo"></i></a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-					<div class="team_section text-center wow zoomIn" data-wow-delay="0.6s">
-						<div class="team_img">
-							<img src="http://via.placeholder.com/272x307" alt="" class="img-responsive team_member">
-							<img src="images/team/shape.png" alt="" class="img-responsive shape_img">
-						</div>
-						<h2 class="ice_sub_heading white"><a href="team_single.html">Matt Gibson</a></h2>
-						<p class="white">Director</p>
-						<ul class="social_icon">
-							<li><a href="#"><i class="flaticon-facebook-letter-logo"></i></a></li>
-							<li><a href="#"><i class="flaticon-twitter-logo-silhouette"></i></a></li>
-							<li><a href="#"><i class="flaticon-linkedin-logo"></i></a></li>
-							<li><a href="#"><i class="flaticon-google-plus-logo"></i></a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="overlay">
-		<div class="left_img"><img src="images/team/1.png" alt=""></div>
-		<div class="right_img"><img src="images/team/2.png" alt=""></div>
-	</div>
-</div>
 
 <div class="ice_main_section1">
 	<div class="container">
@@ -288,4 +205,44 @@
 		</div>
 	</div>
 </div>
+<script>
+	$(document).ready(function () {
+		// Attach a click event handler to all buttons with the "add-to-order-button" class
+		$(".add-to-order-button").click(function () {
+			// Get the product ID from the data-product-id attribute
+			var productId = $(this).data("product-id");
+			var OrderId = localStorage.getItem("orderId");
+			// Send an AJAX request to the server to add the product to the order
+			$.ajax({
+				type: "POST",
+				url: "/Orders/AddToOrder",
+				data: { productId: productId, orderId: OrderId },
+				success: function (response) {
+					console.log('123!#' + JSON.stringify(response));
+					var newOrderId = response.order.id; // Access the 'id' property of the 'order' object
+					// Update the local storage with the new orderId value received from the server
+					localStorage.setItem('orderId', newOrderId);
+					var productCountElement = $('#product-count');
+					var currentCount = parseInt(productCountElement.text(), 10); // Parse the current count as an integer
+					var updatedCount = currentCount + 1; // Increment the count by 1
+					productCountElement.text(updatedCount); // Update the HTML element
+					//alert("Product added to the order!");
+					var successMessage = document.getElementById("success-message");
+					successMessage.classList.remove("hidden");
+					setTimeout(function () {
+						successMessage.classList.add("hidden"); // Hide the message
+					}, 3000);
+
+				},
+				error: function () {
+					// Handle AJAX error
+					alert("An error occurred while adding the product to the order.");
+				}
+			});
+		});
+	});
+
+
+</script>
+
 

@@ -5,47 +5,45 @@
     <title>PayPal</title>
 </head>
 <body>
-    <script src="https://www.paypal.com/sdk/js?client-id=Ad_vQkBsB_83IjAeJ6fRZLjsBT9p2aBAKhyIBJE5bhnlm2No_b58SOx0F5lky5vmOwsTL-QJt2NwqhC0&components=buttons"></script>
-    <div id="view-paypal-link" style="max-width: 1000px;"></div>
+    <script src="https://www.paypal.com/sdk/js?client-id=AU9ewQk3eD4GuIzgbfG8ppN_crBDx30V9hYDCVKFzykCHxpd6VejfRgS0p-ObX9mdfrKCQtX4PHbk_pg&components=buttons"></script>
+
+    <div id="paypal-button-container" style="max-width:1000px;"></div>
+
     <script>
-        paypal.Buttons(
-            {
-                style:
-                {
+        paypal.Buttons({
+            style: {
                 disableMaxWidth: true
             },
-            createOrder: function (data, actions)
-            {
-                // Set up the transaction
-                var urlParams = new URLSearchParams(window.location.search);
-                var totalPrice = urlParams.get('totalPrice');
+        }).render('#paypal-button-container');
+    </script>
+    <div class="wc-proceed-to-checkout">
+        <div id="paypal-button-container">
+            <button id="view-checkout-link" class="ice_btn btn4">proceed to checkout</button>
+        </div>
+    </div>
+    <script>
+        // Function to handle click on "view checkout" link
+        function onViewCheckoutClick(event) {
+            // Prevent the default behavior (page reload) of the button click
+            event.preventDefault();
 
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: totalPrice
-                        }
-                    }]
-                });
-            },
-            onApprove: function (data, actions)
-            {
-                // Capture the funds from the transaction
-                return actions.order.capture().then(function (details) {
-                    // Call your server to save the transaction
-                    return fetch('/your-server-side-code',
-                        {
-                        method: 'post',
-                        headers: {
-                            'content-type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            orderID: data.orderID
-                        })
-                    });
-                });
-            }
-        }).render('#view-paypal-link');
+            // Retrieve the orderId from local storage
+            var orderId = localStorage.getItem('orderId');
+            console.log('123!#' + orderId);
+
+            // Parse orderId as an integer (or default to -1 if it's not a valid integer)
+            var myId = parseInt(orderId) || -1;
+
+            // Construct the URL based on myId
+            var url = '/Default/Checkout?orderId=' + myId; // Correct the controller name here
+
+            // Redirect to the URL
+            window.location.href = url;
+        }
+
+        // Attach click event handler to the "view checkout" link
+        $(document).on('click', '#view-checkout-link', onViewCheckoutClick);
+
     </script>
 </body>
 </html>

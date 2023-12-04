@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ice_cream_shop.Migrations
 {
     [DbContext(typeof(Ice_cream_shopContext))]
-    [Migration("20231203164646_UpdateDay")]
-    partial class UpdateDay
+    [Migration("20231204115308_AddDay2somee")]
+    partial class AddDay2somee
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

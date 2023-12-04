@@ -1,4 +1,4 @@
-﻿
+﻿@model List<Product>
 @{
     ViewData["Title"] = "about";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -72,62 +72,35 @@
 			</div>
 		</div>
 	</div>
-	<div class="ice_main_section2 ice_special_wrapper">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg- col-md-6 col-sm-12 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-0 col-sx-offset-0">
-					<div class="heading_wrapper text-center wow slidedown">
-						<h1 class="ice_heading_white">Todays Special</h1>
-						<p class="white">It is a paradisematic country, in which roasted parts of sentences fly into your mouth.Pityful a rethoric question.</p>
-					</div>
+<div class="ice_main_section2 ice_special_wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg- col-md-6 col-sm-12 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-0 col-sx-offset-0">
+				<div class="heading_wrapper text-center wow slidedown">
+					<h1 class="ice_heading_white">Todays Special</h1>
+					<p class="white">It is a paradisematic country, in which roasted parts of sentences fly into your mouth.Pityful a rethoric question.</p>
 				</div>
-				<div class="ice_special">
+			</div>
+			<div class="ice_special">
+				@foreach (var product in Model)
+				{
 					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 						<div class="special_section text-center wow slideright">
-						<div class="special_img">
-							<img src="/images/shop/shop_5.jpg" alt="" class="img-responsive">
-						</div>
-						<h2 class="ice_sub_heading"><a href="shop_single.html"><i class="flaticon-check"></i> Green tea ice cream</a></h2>
-						<p>It is a paradisematic country, in which roasted parts of sentences fly into your mouth.Pityful a rethoric question.</p>
-						<div class="wishlist_wrapper">
-							<span class="pull-left">$70.00</span>
-							<a href="" class="pull-right"><i class="flaticon-like"></i> add to wishlist</a>
-						</div>
-						<a href="shop_single.html" class="ice_btn">add to cart</a>
+							<div class="special_img">
+								<img src="@product.ImagePath" alt="@product.Name" class="img-responsive">
+							</div>
+							<h2 class="ice_sub_heading"><i class="flaticon-check"></i> @product.Name</h2>
+@*							<button class="ice_btn add-to-order-button" data-product-id="@product.Id">Add to Cart</button>
+*@						</div>
 					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<div class="special_section text-center">
-						<div class="special_img">
-							<img src="/images/shop/shope_3.jpg" alt="" class="img-responsive">
-						</div>
-						<h2 class="ice_sub_heading"><a href="shop_single.html"><i class="flaticon-check"></i> Butter Brickle</a></h2>
-						<p>It is a paradisematic country, in which roasted parts of sentences fly into your mouth.Pityful a rethoric question.</p>
-						<div class="wishlist_wrapper">
-							<span class="pull-left">$70.00</span>
-							<a href="" class="pull-right"><i class="flaticon-like"></i> add to wishlist</a>
-						</div>
-						<a href="shop_single.html" class="ice_btn">add to cart</a>
+					<div id="success-message" class="success-message hidden">
+						Product added to the cart! 🍓
 					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col-lg-offset-0 col-md-offset-0 col-sm-offset-3 col-sx-offset-0">
-					<div class="special_section text-center wow slideleft">
-						<div class="special_img">
-							<img src="/images/shop/shope_4.jpg" alt="" class="img-responsive">
-						</div>
-						<h2 class="ice_sub_heading"><a href="shop_single.html"><i class="flaticon-check"></i> Chocolate chip cookie</a></h2>
-						<p>It is a paradisematic country, in which roasted parts of sentences fly into your mouth.Pityful a rethoric question.</p>
-						<div class="wishlist_wrapper">
-							<span class="pull-left">$70.00</span>
-							<a href="" class="pull-right"><i class="flaticon-like"></i> add to wishlist</a>
-						</div>
-							<a href="shop_single.html" class="ice_btn">add to cart</a>
-						</div>
-					</div>
-				</div>
+				}
 			</div>
 		</div>
 	</div>
+</div>
 	<div class="ice_main_section1">
 		<div class="container">
 			<div class="row">
@@ -182,3 +155,44 @@
 			</div>
 		</div>
 	</div>
+<script>
+	$(document).ready(function () {
+		// Attach a click event handler to all buttons with the "add-to-order-button" class
+		$(".add-to-order-button").click(function () {
+			// Get the product ID from the data-product-id attribute
+			var productId = $(this).data("product-id");
+			var OrderId = localStorage.getItem("orderId");
+			// Send an AJAX request to the server to add the product to the order
+			$.ajax({
+				type: "POST",
+				url: "/Orders/AddToOrder",
+				data: { productId: productId, orderId: OrderId },
+				success: function (response) {
+					console.log('123!#' + JSON.stringify(response));
+					var newOrderId = response.order.id; // Access the 'id' property of the 'order' object
+					// Update the local storage with the new orderId value received from the server
+					localStorage.setItem('orderId', newOrderId);
+					var productCountElement = $('#product-count');
+					var currentCount = parseInt(productCountElement.text(), 10); // Parse the current count as an integer
+					var updatedCount = currentCount + 1; // Increment the count by 1
+					productCountElement.text(updatedCount); // Update the HTML element
+					//alert("Product added to the order!");
+					var successMessage = document.getElementById("success-message");
+					successMessage.classList.remove("hidden");
+					setTimeout(function () {
+						successMessage.classList.add("hidden"); // Hide the message
+					}, 3000);
+
+				},
+				error: function () {
+					// Handle AJAX error
+					alert("An error occurred while adding the product to the order.");
+				}
+			});
+		});
+	});
+
+
+</script>
+
+

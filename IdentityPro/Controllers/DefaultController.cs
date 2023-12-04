@@ -64,12 +64,43 @@ namespace IdentityPro.Controllers
                         .Take(3)
                         .ToList();
             }
-            return View(topProducts);
+            var products = new List<Product>();
+            foreach(var item in topProducts)
+            {
+                var product = _context.Product
+                .FirstOrDefault(p => p.Name == item.Name);
+                products.Add(product);
+            }
+            return View(products);
         }
         // GET: DefaultController/About
         public ActionResult About()
         {
-            return View();
+            var topProducts = new List<OrderItem>();
+            var amount = _context.OrderItem.Count();
+            if (amount > 0)
+            {
+                topProducts = _context.OrderItem
+                       .GroupBy(oi => oi.Name)
+                       .Select(group => new OrderItem
+                       {
+                           Name = group.Key,
+                           Amount = group.Sum(oi => oi.Amount),
+                           Price = group.First().Price,
+                           ImagePath = group.First().ImagePath
+                       })
+                       .OrderByDescending(oi => oi.Amount)
+                       .Take(3)
+                       .ToList();
+            }
+            var products = new List<Product>();
+            foreach (var item in topProducts)
+            {
+                var product = _context.Product
+                .FirstOrDefault(p => p.Name == item.Name);
+                products.Add(product);
+            }
+            return View(products);
         }
         public IActionResult PayPal()
         {
@@ -274,71 +305,79 @@ namespace IdentityPro.Controllers
             [HttpPost]
         public async Task<ActionResult> UpdateCheckout(InputModel model, int orderId)
         {
-            int myId = orderId;
-            string userName = User.Identity?.Name;
-            IdentityUser user = _userManager.FindByNameAsync(userName).Result;
-            ApplicationUser applicationUser = (ApplicationUser)user;
-
-            if (applicationUser != null)
+            if (model.ZipCode != 0 && model.Street != null && model.City != null && model.Apartment != null)
             {
-                //var content = CheckAddressExistence(model.City.ToString(), model.Street.ToString());
-                bool isValidAddresss = await CheckAddressExistence(model.City.ToString(), model.Street.ToString());
-                bool IsHolidayWeek = await CheckIfHolidayWeek();
-                // Deserialize the response content manually
-                if (isValidAddresss)
-                {
-                    WeatherInfo weather = await GeWeather(model.City.ToString());
-                    // Modify the user's fields based on the form data
-                    applicationUser.City = model.City.ToString();
-                    applicationUser.Street = model.Street.ToString();
-                    applicationUser.Apartment = model.Apartment.ToString();
-                    applicationUser.ZipCode = model.ZipCode;
-                    user = applicationUser;
-                    // Save changes to the database
-                    var result = _userManager.UpdateAsync(user).Result;
-                    _user_context.SaveChanges();
+                int myId = orderId;
+                string userName = User.Identity?.Name;
+                IdentityUser user = _userManager.FindByNameAsync(userName).Result;
+                ApplicationUser applicationUser = (ApplicationUser)user;
 
-                    if (result.Succeeded)
+                if (applicationUser != null)
+                {
+                    //var content = CheckAddressExistence(model.City.ToString(), model.Street.ToString());
+                    bool isValidAddresss = await CheckAddressExistence(model.City.ToString(), model.Street.ToString());
+                    bool IsHolidayWeek = await CheckIfHolidayWeek();
+                    // Deserialize the response content manually
+                    if (isValidAddresss)
                     {
-                        try
+                        WeatherInfo weather = await GeWeather(model.City.ToString());
+                        // Modify the user's fields based on the form data
+                        applicationUser.City = model.City.ToString();
+                        applicationUser.Street = model.Street.ToString();
+                        applicationUser.Apartment = model.Apartment.ToString();
+                        applicationUser.ZipCode = model.ZipCode;
+                        user = applicationUser;
+                        // Save changes to the database
+                        var result = _userManager.UpdateAsync(user).Result;
+                        _user_context.SaveChanges();
+
+                        if (result.Succeeded)
                         {
-                            model.MyOrder = CreateOrder(orderId);
+                            try
+                            {
+                                model.MyOrder = CreateOrder(orderId);
+                            }
+                            catch
+                            {
+                                string errorMessage = "Please register first.";
+                                return RedirectToAction("Error", "Home", new { errorMessage });
+                            }
+                            model.MyOrder.CreatedDate = DateTime.Now;
+                            model.MyOrder.DeliveryDate = DateTime.Now.AddDays(14);
+
+                            model.MyOrder.Weather.Season = weather.Season;
+                            model.MyOrder.Weather.Temp = (int)weather.Temp;
+                            model.MyOrder.Weather.Humidity = weather.Humidity;
+                            model.MyOrder.IsHoliday = IsHolidayWeek;
+                            model.MyOrder.Day = DateTime.Now.ToString("dddd");
+
+                            //var temp = (int)weather.Temp;
+                            _context.SaveChanges();
+                            // Continue with the checkout process or redirect to a success page
+                            return RedirectToAction("Index", "Home");
                         }
-                        catch
+                        else
                         {
-                            string errorMessage = "Please register first.";
+                            string errorMessage = "Error accured please try again ";
                             return RedirectToAction("Error", "Home", new { errorMessage });
                         }
-                        model.MyOrder.CreatedDate = DateTime.Now;
-                        model.MyOrder.DeliveryDate = DateTime.Now.AddDays(14);
-
-                        model.MyOrder.Weather.Season = weather.Season;
-                        model.MyOrder.Weather.Temp = (int)weather.Temp;
-                        model.MyOrder.Weather.Humidity = weather.Humidity;
-                        model.MyOrder.IsHoliday = IsHolidayWeek;
-                        model.MyOrder.Day = DateTime.Now.ToString("dddd");
-
-                        //var temp = (int)weather.Temp;
-                        _context.SaveChanges();
-                        // Continue with the checkout process or redirect to a success page
-                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        string errorMessage = "Error accured please try again ";
+                        string errorMessage = "Address not found";
                         return RedirectToAction("Error", "Home", new { errorMessage });
                     }
+
                 }
                 else
                 {
-                    string errorMessage = "Address not found";
-                    return RedirectToAction("Error", "Home", new { errorMessage });
+                    string errorMessage = "Please register first.";
+                    return RedirectToAction("Error", "Home", new { errorMessage });// Handle the case where the user is not found
                 }
-
             }
             else
             {
-                string errorMessage = "Please register first.";
+                string errorMessage = "One or more of the details are missing";
                 return RedirectToAction("Error", "Home", new { errorMessage });// Handle the case where the user is not found
             }
         }
@@ -483,47 +522,6 @@ namespace IdentityPro.Controllers
 
                 return userOrder;
             }
-        }
-
-        public IActionResult Index(decimal orderAmount)
-        {
-            // Your checkout logic to get the amount
-
-            // Initialize PayPal API context
-            var apiContext = new APIContext(new OAuthTokenCredential(
-                _configuration["PayPal:ClientId"],
-                _configuration["PayPal:ClientSecret"]
-            ).GetAccessToken());
-
-            // Create payment
-            var payment = new Payment
-            {
-                intent = "sale",
-                payer = new Payer { payment_method = "paypal" },
-                transactions = new List<Transaction>
-            {
-                new Transaction
-                {
-                    amount = new Amount
-                    {
-                        currency = "USD",
-                        total = orderAmount.ToString("F2")
-                    },
-                    description = "Your payment description"
-                }
-            },
-                redirect_urls = new RedirectUrls
-                {
-                    //return_url = "https://example.com/return",
-                    //cancel_url = "https://example.com/cancel"
-                }
-            };
-
-            var createdPayment = payment.Create(apiContext);
-
-            // Redirect user to PayPal for approval
-            var approvalUrl = createdPayment.links.FirstOrDefault(link => link.rel.Equals("approval_url"))?.href;
-            return Redirect(approvalUrl);
         }
     }
 

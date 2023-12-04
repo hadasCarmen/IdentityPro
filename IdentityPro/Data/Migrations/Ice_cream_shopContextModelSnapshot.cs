@@ -94,7 +94,7 @@ namespace Ice_cream_shop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApplicationUser");
+                    b.ToTable("ApplicationUser", (string)null);
                 });
 
             modelBuilder.Entity("IdentityPro.Models.Order", b =>
@@ -130,7 +130,7 @@ namespace Ice_cream_shop.Migrations
 
                     b.HasIndex("WeatherId");
 
-                    b.ToTable("Order");
+                    b.ToTable("Order", (string)null);
                 });
 
             modelBuilder.Entity("IdentityPro.Models.OrderItem", b =>
@@ -162,7 +162,7 @@ namespace Ice_cream_shop.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItem", (string)null);
                 });
 
             modelBuilder.Entity("IdentityPro.Models.Product", b =>
@@ -197,7 +197,7 @@ namespace Ice_cream_shop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("IdentityPro.Models.User", b =>
@@ -245,7 +245,7 @@ namespace Ice_cream_shop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("IdentityPro.Models.Weather", b =>
@@ -277,7 +277,7 @@ namespace Ice_cream_shop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Weather");
+                    b.ToTable("Weather", (string)null);
                 });
 
             modelBuilder.Entity("IdentityPro.Models.Order", b =>

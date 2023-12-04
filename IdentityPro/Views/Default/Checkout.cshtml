@@ -160,7 +160,11 @@
 							</div>
 
 						</form>
-
+						<div class="wc-proceed-to-checkout">
+							<div id="paypal-button-container">
+								<a asp-controller="Default" class="ice_btn btn4" asp-action="PayPal">Paypal</a>
+							</div>
+						</div>
 					</div>
 
 				</div>
@@ -173,5 +177,6 @@
     // Set the value of the hidden input field with the orderid from local storage
     document.getElementById('orderid').value = localStorage.getItem('orderid');
 	var orderAmount = document.getElementById('cartTotal').value;
+
 </script>
 

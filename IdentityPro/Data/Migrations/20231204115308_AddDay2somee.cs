@@ -4,7 +4,7 @@
 
 namespace Ice_cream_shop.Migrations
 {
-    public partial class UpdateDay : Migration
+    public partial class AddDay2somee : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

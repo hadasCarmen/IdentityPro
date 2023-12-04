@@ -58,14 +58,18 @@ Version: 1.0.0
 											<li><a asp-controller="Default" asp-action="Home">home</a></li>
 											<li><a asp-controller="Default" asp-action="About">About</a></li>
 											<li><a asp-controller="Default" asp-action="Shop">Shop</a></li>
-											<li><a asp-controller="Default" asp-action="Contact">Contact</a></li>
-											@if (User.Identity?.Name! == "manager@gmail.com")
+@*											<li><a asp-controller="Default" asp-action="Contact">Contact</a></li>
+*@											@if (User.Identity?.Name! == "manager@gmail.com")
 											{
 												<li><a asp-controller="Orders" asp-action="Index">Orders</a></li>
 											}
 											@if (User.Identity?.Name! == "manager@gmail.com")
 											{
 												<li><a asp-controller="Products" asp-action="Index">Products</a></li>
+											}
+											@if (User.Identity?.Name! == "manager@gmail.com")
+											{
+												<li><a asp-controller="Orders" asp-action="GraphCreate">View Chart</a></li>
 											}
 											
 										</ul>

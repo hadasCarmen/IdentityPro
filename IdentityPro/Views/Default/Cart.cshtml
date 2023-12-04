@@ -84,14 +84,7 @@
                                         <h2>Cart Totals</h2>
                                         <table>
                                             <tbody>
-                                                <div class="wc-proceed-to-checkout">
-                                                <div id="paypal-button-container">
-                                                    <button id="view-paypal-link" class="checkout-button ice_btn alt wc-forward">Paypal</button>
-                                                </div>
-                                                </div>
-
-@*                                                    <a href="../Default/PayPal" id="view-paypal-link" class="ice_btn">Pay with PayPal</a>
-*@                                                <tr class="order-total">
+                                                  <tr class="order-total">
                                                     <th>Total</th>
                                                     <td>
                                                         @if (Model.Products != null && Model.Products.Any())
@@ -164,28 +157,6 @@
 
     // Attach click event handler to the "view checkout" link
     $(document).on('click', '#view-checkout-link', onViewCheckoutClick);
-
-    function onViewPayPalClick(event) {
-        // Prevent the default behavior (page reload) of the button click
-        event.preventDefault();
-
-        //// Retrieve the orderId from local storage
-        //var orderId = localStorage.getItem('orderId');
-        //console.log('123!#' + orderId);
-
-        //// Parse orderId as an integer (or default to -1 if it's not a valid integer)
-        //var myId = parseInt(orderId) || -1;
-
-        // Construct the URL based on myId
-        var url = '/Default/PayPal' 
-
-        // Redirect to the URL
-        window.location.href = url;
-    }
-
-    // Attach click event handler to the "view checkout" link
-    $(document).on('click', '#view-paypal-link', onViewPayPalClick);
-
 
 	function removeProduct(productId) {
 		var orderId = localStorage.getItem("orderId");
