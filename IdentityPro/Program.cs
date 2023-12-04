@@ -1,8 +1,6 @@
 using IdentityPro.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using IceCreamShopGateway.Services;
-
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<Ice_cream_shopContext>(options =>

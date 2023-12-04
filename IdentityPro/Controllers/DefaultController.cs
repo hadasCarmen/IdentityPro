@@ -9,14 +9,10 @@ using System.Xml.Linq;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using IceCreamShopGateway.Services;
-using PayPal.Api;
 using System.IO;
 using PayPalHttp;
 using Newtonsoft.Json;
-using IceCreamShopGateway.Models;
 using Microsoft.CodeAnalysis;
-using static PayPal.BaseConstants;
 using System.Security.Cryptography.X509Certificates;
 
 namespace IdentityPro.Controllers
@@ -245,7 +241,7 @@ namespace IdentityPro.Controllers
             }
         }
 
-        public async Task<WeatherInfo> GeWeather(string location)
+        public async Task<Weather> GeWeather(string location)
         {
             var apiUrl = $"http://localhost:5041/api/Weather/get?location={location}";
 
@@ -261,7 +257,7 @@ namespace IdentityPro.Controllers
                     var content = response.Content.ReadAsStringAsync().Result;
 
                     // Deserialize the response content manually
-                    var result = JsonConvert.DeserializeObject<WeatherInfo>(content);
+                    var result = JsonConvert.DeserializeObject<Weather>(content);
 
                     // Use the result directly in the if statement
                     return result; // If result is null, default to false
@@ -320,7 +316,7 @@ namespace IdentityPro.Controllers
                     // Deserialize the response content manually
                     if (isValidAddresss)
                     {
-                        WeatherInfo weather = await GeWeather(model.City.ToString());
+                        Weather weather = await GeWeather(model.City.ToString());
                         // Modify the user's fields based on the form data
                         applicationUser.City = model.City.ToString();
                         applicationUser.Street = model.Street.ToString();
@@ -474,6 +470,18 @@ namespace IdentityPro.Controllers
             {
                 IdentityUser user = _userManager.FindByNameAsync(userName).Result;
                 ApplicationUser applicationUser = (ApplicationUser)user;
+                ApplicationUser newUseUser = new ApplicationUser
+                {
+                    UserName = applicationUser.UserName,
+                    Email = applicationUser.Email,
+                    PhoneNumber = applicationUser.PhoneNumber,
+                    FirstName = applicationUser.FirstName,
+                    LastName = applicationUser.LastName,
+                    City = applicationUser.City,
+                    Street = applicationUser.Street,
+                    Apartment = applicationUser.Apartment,
+                    ZipCode = applicationUser.ZipCode,
+                };
                 Models.Order userOrder;
 
                 if (orderId == -1)
@@ -514,7 +522,7 @@ namespace IdentityPro.Controllers
 
                     if (userOrder != null)
                     {
-                        userOrder.User = applicationUser;
+                        userOrder.User = newUseUser;
                         userOrder.Weather = newWeather;
                     }
                     // else: The order with orderId doesn't exist or is already delivered
