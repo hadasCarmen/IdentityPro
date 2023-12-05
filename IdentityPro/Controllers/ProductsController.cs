@@ -54,7 +54,7 @@ namespace IdentityPro.Controllers
 
         public async Task<bool> IsIceCream(string path)
         {
-            var apiUrl = $"http://localhost:5041/api/image?imageUrl={path}";
+            var apiUrl = $"http://www.gatewayicecream4u.somee.com/api/image?imageUrl={path}";
 
             // Create an instance of HttpClient
             using (var httpClient = new System.Net.Http.HttpClient())

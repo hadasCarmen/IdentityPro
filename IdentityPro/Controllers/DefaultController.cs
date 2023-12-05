@@ -214,7 +214,7 @@ namespace IdentityPro.Controllers
         
         public async Task<bool> CheckAddressExistence(string city, string street)
         {
-            var apiUrl = $"http://localhost:5041/api/Address/checkAddress?city={city}&street={street}";
+            var apiUrl = $"http://www.gatewayicecream4u.somee.com/api/Address/checkAddress?city={city}&street={street}";
 
             // Create an instance of HttpClient
             using (var httpClient = new System.Net.Http.HttpClient())
@@ -243,7 +243,7 @@ namespace IdentityPro.Controllers
 
         public async Task<Weather> GeWeather(string location)
         {
-            var apiUrl = $"http://localhost:5041/api/Weather/get?location={location}";
+            var apiUrl = $"http://www.gatewayicecream4u.somee.com/api/Weather/get?location={location}";
 
             // Create an instance of HttpClient
             using (var httpClient = new System.Net.Http.HttpClient())
@@ -272,7 +272,7 @@ namespace IdentityPro.Controllers
 
         public async Task<bool> CheckIfHolidayWeek()
         {
-            var apiUrl = $"http://localhost:5041/api/HebrewCal/get";
+            var apiUrl = $"http://www.gatewayicecream4u.somee.com/api/HebrewCal/get";
 
             // Create an instance of HttpClient
             using (var httpClient = new System.Net.Http.HttpClient())
